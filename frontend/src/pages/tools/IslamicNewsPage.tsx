@@ -21,7 +21,6 @@ import {
   Globe,
   RefreshCw,
   Rss,
-  AlertCircle,
   X,
 } from 'lucide-react';
 import { useLanguageStore } from '../../stores/languageStore';
@@ -37,7 +36,6 @@ import { useDebounce } from '../../hooks/useDebounce';
 import { ErrorBoundary, InlineError } from '../../components/ui/ErrorBoundary';
 import { SkeletonList } from '../../components/ui/Skeleton';
 import { NoSearchResults, NoData } from '../../components/ui/EmptyState';
-import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
 import clsx from 'clsx';
 
 // ============================================

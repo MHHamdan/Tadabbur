@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Video, Search, Play, Clock, User, Filter, ExternalLink, Loader2 } from 'lucide-react';
+import { ArrowLeft, Video, Search, Play, Clock, User, Filter, Loader2 } from 'lucide-react';
 import { useLanguageStore } from '../../stores/languageStore';
 import clsx from 'clsx';
 

@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback, useMemo, memo, KeyboardEvent } from 'react';
-import { Send, Settings2, ChevronDown, ChevronUp, Search, Sparkles, MessageCircle, Trash2, Book, Users, Heart, Star, Clock, Lightbulb, BookOpen, Mic, MicOff } from 'lucide-react';
+import { useState, useEffect, useRef, useCallback, memo, KeyboardEvent } from 'react';
+import { Send, Settings2, ChevronDown, ChevronUp, Search, Sparkles, MessageCircle, Trash2, Users, Heart, Star, Lightbulb, BookOpen } from 'lucide-react';
 import { useLanguageStore } from '../stores/languageStore';
 import { t } from '../i18n/translations';
 import { ragApi, RAGResponse, TafseerSource } from '../lib/api';
@@ -243,7 +243,7 @@ export function AskPage() {
 
       // Check for structured error response
       if (result.data && 'ok' in result.data && result.data.ok === false) {
-        const errorData = result.data as {
+        const errorData = result.data as unknown as {
           ok: boolean;
           error_id: string;
           message_ar: string;

@@ -1,5 +1,5 @@
-import { useState, memo, useCallback } from 'react';
-import { User, Bot, Clock, AlertTriangle, CheckCircle, Sparkles, Info, BookOpen, ExternalLink, Copy, Check, Share2, ThumbsUp, ThumbsDown, RotateCcw } from 'lucide-react';
+import { useState, useCallback } from 'react';
+import { User, Bot, Clock, AlertTriangle, CheckCircle, Sparkles, Info, BookOpen, ExternalLink, Copy, Check, Share2, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { RAGResponse } from '../../lib/api';

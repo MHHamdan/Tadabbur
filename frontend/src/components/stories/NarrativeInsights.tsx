@@ -27,7 +27,7 @@ const NARRATIVE_PHASES = [
   { id: 'resolution', roles: ['resolution', 'reflection', 'conclusion'], icon: '5' },
 ];
 
-export function NarrativeInsights({ segments, language, storyName }: NarrativeInsightsProps) {
+export function NarrativeInsights({ segments, language, storyName: _storyName }: NarrativeInsightsProps) {
   const isArabic = language === 'ar';
 
   // Analyze narrative structure
@@ -292,7 +292,7 @@ export function NarrativeInsights({ segments, language, storyName }: NarrativeIn
             {isArabic ? 'الموضوعات الرئيسية' : 'Primary Themes'}
           </h3>
           <div className="flex flex-wrap gap-2">
-            {keyInsights.topThemes.map((theme, i) => (
+            {keyInsights.topThemes.map((theme) => (
               <span
                 key={theme}
                 className="bg-primary-100 text-primary-800 px-3 py-1.5 rounded-full text-sm font-medium"

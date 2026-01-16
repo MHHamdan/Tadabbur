@@ -13,7 +13,6 @@ import {
   Search,
   BookOpen,
   Sparkles,
-  X,
   Clock,
   ChevronRight,
   Trash2,

@@ -106,11 +106,14 @@ function useHijriToday() {
     return gregorianToHijri(dateStr);
   }, []);
 
-  return useAsync(fetchTodayHijri, {
-    immediate: true,
-    dedupe: true,
-    dedupeKey: 'today-hijri',
-  });
+  const result = useAsync(fetchTodayHijri);
+
+  // Auto-execute on mount
+  useEffect(() => {
+    result.execute();
+  }, []);
+
+  return result;
 }
 
 function useHijriCalendar(month: number, year: number, todayHijri: HijriDate | null) {
@@ -134,10 +137,16 @@ function useHijriCalendar(month: number, year: number, todayHijri: HijriDate | n
     });
   }, [month, year, todayHijri]);
 
-  return useAsync(fetchCalendar, {
-    immediate: !!todayHijri,
-    retry: 2,
-  });
+  const result = useAsync(fetchCalendar);
+
+  // Auto-execute when todayHijri is available or when month/year changes
+  useEffect(() => {
+    if (todayHijri) {
+      result.execute();
+    }
+  }, [todayHijri, month, year]);
+
+  return result;
 }
 
 function useDateConverter() {
@@ -653,7 +662,7 @@ function HijriCalendarPageContent() {
   );
 
   // Fetch today's Hijri date
-  const { data: todayHijri, isLoading: todayLoading, error: todayError } = useHijriToday();
+  const { data: todayHijri, isPending: todayLoading, error: todayError } = useHijriToday();
 
   // Update calendar position when today's date is loaded
   useEffect(() => {
@@ -668,7 +677,7 @@ function HijriCalendarPageContent() {
   // Fetch calendar data
   const {
     data: calendarDays,
-    isLoading: calendarLoading,
+    isPending: calendarLoading,
     error: calendarError,
     execute: refetchCalendar,
   } = useHijriCalendar(calendarPosition.month, calendarPosition.year, todayHijri);
@@ -750,7 +759,7 @@ function HijriCalendarPageContent() {
       )}
       {todayError && (
         <InlineError
-          message={isArabic ? 'فشل في تحميل التاريخ' : 'Failed to load date'}
+          error={isArabic ? 'فشل في تحميل التاريخ' : 'Failed to load date'}
           className="mb-6"
         />
       )}

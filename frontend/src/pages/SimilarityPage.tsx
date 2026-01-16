@@ -40,7 +40,14 @@ import {
   AdvancedSimilarityMatch,
   SimilarityScores,
 } from '../lib/api';
-import { ErrorPanel, parseAPIError, APIErrorData } from '../components/common';
+import { parseAPIError } from '../components/common';
+
+// Local error type for similarity page
+interface SimilarityError {
+  message: string;
+  message_ar: string;
+  request_id?: string;
+}
 import clsx from 'clsx';
 
 // =============================================================================
@@ -204,12 +211,6 @@ function normalizeArabicDigits(input: string): string {
   return result;
 }
 
-/**
- * Remove Arabic diacritics (tashkeel).
- */
-function removeArabicDiacritics(text: string): string {
-  return text.replace(/[\u064B-\u065F\u0670]/g, '');
-}
 
 /**
  * Parse input to extract surah and ayah numbers.
@@ -763,7 +764,7 @@ function CandidateSelectionModal({
 // =============================================================================
 // Fuzzy Match Warning Banner
 // =============================================================================
-function FuzzyMatchWarning({ language }: { language: 'ar' | 'en' }) {
+function FuzzyMatchWarning({ language: _language }: { language: 'ar' | 'en' }) {
   return (
     <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
       <div className="flex items-start gap-2">
@@ -835,7 +836,7 @@ export function SimilarityPage() {
   const [data, setData] = useState<AdvancedSimilarityResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [resolving, setResolving] = useState(false);
-  const [error, setError] = useState<APIErrorData | null>(null);
+  const [error, setError] = useState<SimilarityError | null>(null);
   const [expandedMatch, setExpandedMatch] = useState<number | null>(null);
 
   // Candidate selection state
@@ -1036,7 +1037,7 @@ export function SimilarityPage() {
     });
 
     return groups;
-  })() : new Map();
+  })() : new Map<string, AdvancedSimilarityMatch[]>();
 
   // Get available themes and connection types
   const availableThemes = data?.theme_distribution ? Object.keys(data.theme_distribution) : [];

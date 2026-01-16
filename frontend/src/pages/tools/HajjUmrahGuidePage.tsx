@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Plane, MapPin, CheckCircle2, Circle, Info, ChevronDown, ChevronUp, Calendar, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Plane, MapPin, CheckCircle2, Circle, Info, ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react';
 import { useLanguageStore } from '../../stores/languageStore';
 import clsx from 'clsx';
 

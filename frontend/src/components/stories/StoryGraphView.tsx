@@ -17,9 +17,9 @@
  * - Chronological edges have different visual treatment than thematic
  * - Designed for learning, not just exploration
  */
-import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
-import cytoscape, { NodeSingular, EdgeSingular } from 'cytoscape';
-import { StoryGraph, StoryGraphNode, StoryGraphEdge, AtlasGraphResponse } from '../../lib/api';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import cytoscape, { NodeSingular } from 'cytoscape';
+import { StoryGraphNode, StoryGraphEdge } from '../../lib/api';
 import { translateTag as translateTagFromI18n, Language } from '../../i18n/translations';
 
 // =============================================================================
@@ -34,7 +34,7 @@ interface GenericGraph {
     id: string;
     type: string;
     label: string;
-    data?: Record<string, unknown>;
+    data: Record<string, unknown>;
   }>;
   edges: Array<{
     source: string;
@@ -51,6 +51,19 @@ interface StoryGraphViewProps {
   onNodeClick?: (node: StoryGraphNode) => void;
   onEdgeClick?: (edge: StoryGraphEdge) => void;
   initialMode?: ViewMode;
+}
+
+// Node data interface for type safety
+interface NodeData {
+  verse_reference?: string;
+  narrative_role?: string;
+  chronological_index?: number;
+  total_steps?: number;
+  summary?: string;
+  semantic_tags?: string[];
+  memorization_cue?: string;
+  is_entry_point?: boolean;
+  [key: string]: unknown;
 }
 
 interface NodeDetailPanelProps {
@@ -130,18 +143,6 @@ const EDGE_TYPE_STYLES: Record<string, { color: string; style: 'solid' | 'dashed
   contains: { color: '#cbd5e1', style: 'dashed', arrow: false },
 };
 
-// Edge type translations for legend
-const EDGE_TYPE_TRANSLATIONS: Record<string, { ar: string; en: string }> = {
-  chronological_next: { ar: 'تسلسل زمني', en: 'Chronological' },
-  continuation: { ar: 'استمرار', en: 'Continuation' },
-  cause_effect: { ar: 'سبب ونتيجة', en: 'Cause & Effect' },
-  consequence: { ar: 'عاقبة', en: 'Consequence' },
-  thematic_link: { ar: 'رابط موضوعي', en: 'Thematic Link' },
-  parallel: { ar: 'تشابه', en: 'Parallel' },
-  contrast: { ar: 'تباين', en: 'Contrast' },
-  expansion: { ar: 'توسع', en: 'Expansion' },
-  contains: { ar: 'يحتوي', en: 'Contains' },
-};
 
 // Minimum container dimensions to prevent layout collapse
 const MIN_CONTAINER_WIDTH = 300;
@@ -167,7 +168,7 @@ function NodeDetailPanel({ node, language, onClose }: NodeDetailPanelProps) {
   if (!node) return null;
 
   const isArabic = language === 'ar';
-  const data = node.data || {};
+  const data: NodeData = (node.data || {}) as NodeData;
 
   // Translate semantic tag using the universal translateTag helper
 
@@ -290,13 +291,13 @@ export function StoryGraphView({
   graph,
   language,
   onNodeClick,
-  onEdgeClick,
+  onEdgeClick: _onEdgeClick,
   initialMode = 'chronological',
 }: StoryGraphViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<cytoscape.Core | null>(null);
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
-  const layoutTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const layoutTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>(initialMode);
   const [selectedNode, setSelectedNode] = useState<StoryGraphNode | null>(null);
   const [hoveredNode, setHoveredNode] = useState<{ node: StoryGraphNode; x: number; y: number } | null>(null);
@@ -336,14 +337,14 @@ export function StoryGraphView({
     const maxIndex = Math.max(
       ...graph.nodes
         .filter(n => n.type === 'segment')
-        .map(n => n.data?.chronological_index || 0)
+        .map(n => (n.data.chronological_index as number) || 0)
     );
     setTotalSteps(maxIndex);
   }, [graph]);
 
   // Build Cytoscape stylesheet
   const buildStylesheet = useCallback(() => {
-    const styles: cytoscape.Stylesheet[] = [
+    const styles: cytoscape.StylesheetStyle[] = [
       // Story root node
       {
         selector: 'node[type="story"]',
@@ -385,7 +386,7 @@ export function StoryGraphView({
           'text-halign': 'center',
           color: '#1e293b',
           'font-size': LABEL_FONT_SIZE,
-          'font-weight': '600',
+          'font-weight': 600,
           'text-wrap': 'wrap',
           'text-max-width': LABEL_MAX_WIDTH,
           width: SEGMENT_NODE_WIDTH,
@@ -805,16 +806,16 @@ export function StoryGraphView({
           dir={isArabic ? 'rtl' : 'ltr'}
         >
           <div className="font-medium truncate">{hoveredNode.node.label}</div>
-          {hoveredNode.node.data?.verse_reference && (
+          {hoveredNode.node.data?.verse_reference ? (
             <div className="text-gray-300 text-[10px] mt-0.5">
-              {hoveredNode.node.data.verse_reference as string}
+              {String(hoveredNode.node.data.verse_reference)}
             </div>
-          )}
-          {hoveredNode.node.data?.narrative_role && (
+          ) : null}
+          {hoveredNode.node.data?.narrative_role ? (
             <div className="text-sky-300 text-[10px] mt-0.5">
-              {translateNarrativeRole(hoveredNode.node.data.narrative_role as string, language)}
+              {translateNarrativeRole(String(hoveredNode.node.data.narrative_role), language)}
             </div>
-          )}
+          ) : null}
           <div className="text-gray-400 text-[10px] mt-1">
             {isArabic ? 'انقر للتفاصيل' : 'Click for details'}
           </div>

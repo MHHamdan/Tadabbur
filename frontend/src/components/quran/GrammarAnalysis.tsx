@@ -179,7 +179,7 @@ export function GrammarAnalysisView({ suraNo, ayaNo, verseText }: Props) {
   const [expandedToken, setExpandedToken] = useState<number | null>(null);
   const [showLegend, setShowLegend] = useState(false);
   const [healthStatus, setHealthStatus] = useState<GrammarHealth | null>(null);
-  const [checkingHealth, setCheckingHealth] = useState(false);
+  const [_checkingHealth, _setCheckingHealth] = useState(false);
 
   // Check grammar service health on mount
   useEffect(() => {

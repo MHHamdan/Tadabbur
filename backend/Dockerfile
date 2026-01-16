@@ -1,4 +1,7 @@
-FROM python:3.11-slim
+# Tadabbur Backend Dockerfile
+# Production-optimized Python FastAPI application
+
+FROM python:3.11-slim AS base
 
 WORKDIR /app
 
@@ -9,6 +12,17 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
+# Stage: Development
+FROM base AS development
+COPY pyproject.toml ./
+RUN pip install --no-cache-dir -e .
+COPY . .
+EXPOSE 8000
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+# Stage: Production
+FROM base AS production
+
 # Install Python dependencies
 COPY pyproject.toml ./
 RUN pip install --no-cache-dir -e .
@@ -16,7 +30,7 @@ RUN pip install --no-cache-dir -e .
 # Copy application code
 COPY . .
 
-# Create non-root user
+# Create non-root user for security
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
 
@@ -27,5 +41,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
-# Run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run with multiple workers for production
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]

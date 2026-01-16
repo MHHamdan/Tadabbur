@@ -582,15 +582,6 @@ function ConceptCard({
           )}>
             {displayLabel}
           </h3>
-          {/* Description hint based on type - in current language only */}
-          {concept.description && (
-            <p className={clsx(
-              'text-gray-500 truncate mt-0.5',
-              featured ? 'text-sm' : 'text-xs sm:text-sm'
-            )}>
-              {concept.description.substring(0, 50)}...
-            </p>
-          )}
         </div>
       </div>
 

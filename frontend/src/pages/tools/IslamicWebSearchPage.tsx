@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Search, Globe, ExternalLink, Loader2, Filter, Shield, Clock } from 'lucide-react';
+import { ArrowLeft, Search, Globe, ExternalLink, Loader2, Filter, Shield } from 'lucide-react';
 import { useLanguageStore } from '../../stores/languageStore';
 import clsx from 'clsx';
 
@@ -326,7 +326,7 @@ export function IslamicWebSearchPage() {
                         <h3 className="font-semibold text-gray-900 group-hover:text-indigo-600">
                           {isArabic ? site.name_ar : site.name_en}
                         </h3>
-                        <Shield className="w-4 h-4 text-green-600" title="Trusted" />
+                        <span title="Trusted"><Shield className="w-4 h-4 text-green-600" /></span>
                       </div>
                       <p className="text-xs text-gray-500 mb-1">{site.domain}</p>
                       <p className="text-sm text-gray-600">
@@ -421,7 +421,7 @@ function SearchResultCard({ result, language }: SearchResultCardProps) {
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs text-indigo-600">{result.domain}</span>
             {result.isTrusted && (
-              <Shield className="w-3 h-3 text-green-600" title={isArabic ? 'موثق' : 'Trusted'} />
+              <span title={isArabic ? 'موثق' : 'Trusted'}><Shield className="w-3 h-3 text-green-600" /></span>
             )}
             <span className="text-xs text-gray-400 px-2 py-0.5 bg-gray-100 rounded-full">
               {SEARCH_CATEGORIES.find((c) => c.id === result.category)?.[

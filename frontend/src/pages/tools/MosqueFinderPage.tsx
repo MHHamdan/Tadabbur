@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, MapPin, Navigation, Clock, Phone, Globe, Star, Loader2, Search, Filter, Compass, ExternalLink } from 'lucide-react';
+import { ArrowLeft, MapPin, Navigation, Clock, Phone, Globe, Loader2, Search, Filter, Compass, ExternalLink } from 'lucide-react';
 import { useLanguageStore } from '../../stores/languageStore';
 import clsx from 'clsx';
 

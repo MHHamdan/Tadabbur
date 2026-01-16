@@ -32,14 +32,12 @@ import {
 import { useLanguageStore } from '../../stores/languageStore';
 import {
   getMetalPrices,
-  calculateNisab,
   type MetalPrices,
 } from '../../lib/islamicApis';
 import { useAsync } from '../../hooks/useAsync';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { ErrorBoundary, InlineError } from '../../components/ui/ErrorBoundary';
 import { Skeleton } from '../../components/ui/Skeleton';
-import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
 import clsx from 'clsx';
 
 // ============================================

@@ -17,7 +17,7 @@ import {
   Languages, GitBranch, FileText, Headphones
 } from 'lucide-react';
 import { useLanguageStore } from '../stores/languageStore';
-import { quranApi, Verse, conceptHighlightsApi, multiConceptApi, ConceptHighlight } from '../lib/api';
+import { quranApi, Verse, conceptHighlightsApi, multiConceptApi } from '../lib/api';
 import { GrammarAnalysisView } from '../components/quran/GrammarAnalysis';
 import { SimilarVersesPanel } from '../components/quran/SimilarVersesPanel';
 import { QuranAudioPlayer } from '../components/quran/QuranAudioPlayer';
@@ -62,20 +62,6 @@ const isBismillahVerse = (text: string): boolean => {
   });
 };
 
-/**
- * Remove Bismillah from text for concept highlighting.
- * Returns text with Bismillah phrase removed (if present at start).
- */
-const removeBismillahForHighlight = (text: string): string => {
-  if (!text) return text;
-  let result = text;
-  for (const pattern of BISMILLAH_PATTERNS) {
-    if (result.includes(pattern)) {
-      result = result.replace(pattern, '').trim();
-    }
-  }
-  return result || text; // Return original if nothing left
-};
 
 export function QuranPage() {
   const { suraNo } = useParams<{ suraNo: string }>();
@@ -102,8 +88,8 @@ export function QuranPage() {
 
   // Concept-based highlighting (supports single or multiple concepts)
   const [conceptHighlights, setConceptHighlights] = useState<Set<string>>(new Set());
-  const [conceptLabels, setConceptLabels] = useState<string[]>([]);
-  const [multiConceptMatches, setMultiConceptMatches] = useState<Map<string, string[]>>(new Map()); // verse -> matched concepts
+  const [_conceptLabels, setConceptLabels] = useState<string[]>([]);
+  const [_multiConceptMatches, setMultiConceptMatches] = useState<Map<string, string[]>>(new Map()); // verse -> matched concepts
 
   const highlightRef = useRef<HTMLSpanElement>(null);
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Map, Book, Users, Clock, Tag, ArrowRight, Search } from 'lucide-react';
+import { Map, Book, Users, Clock, ArrowRight, Search } from 'lucide-react';
 import { useLanguageStore } from '../stores/languageStore';
 import { storyAtlasApi, StoryCluster } from '../lib/api';
 import { translateTag, translateFigure, Language } from '../i18n/translations';
@@ -201,9 +201,9 @@ function ClusterCard({ cluster, language }: { cluster: StoryCluster; language: '
         {title}
       </h3>
 
-      {(isArabic ? cluster.summary_ar : cluster.summary_en) && (
+      {cluster.summary_en && (
         <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-          {isArabic ? cluster.summary_ar : cluster.summary_en}
+          {cluster.summary_en}
         </p>
       )}
 
@@ -236,15 +236,13 @@ function ClusterCard({ cluster, language }: { cluster: StoryCluster; language: '
       {cluster.tags && cluster.tags.length > 0 && (
         <div className="flex flex-wrap gap-1 mb-4">
           {cluster.tags.slice(0, 3).map((tag) => {
-            const { text: translatedTag, isMissing: needsTranslation } = translateTag(tag, language);
+            const { text: translatedTag } = translateTag(tag, language);
             return (
               <span
                 key={tag}
-                className={`text-xs px-2 py-0.5 rounded ${needsTranslation ? 'bg-amber-50 text-amber-700' : 'bg-primary-50 text-primary-700'}`}
-                title={needsTranslation ? 'ترجمة عربية ناقصة' : undefined}
+                className="text-xs px-2 py-0.5 rounded bg-primary-50 text-primary-700"
               >
                 {translatedTag}
-                {needsTranslation && <span className="text-amber-500 mr-1">*</span>}
               </span>
             );
           })}

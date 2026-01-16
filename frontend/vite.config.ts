@@ -28,14 +28,8 @@ export default defineConfig({
     // Enable source maps for production debugging
     sourcemap: false,
 
-    // Minification settings
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-      },
-    },
+    // Minification settings - use esbuild (faster, included with Vite)
+    minify: 'esbuild',
 
     // Chunk size warning limit (500KB)
     chunkSizeWarningLimit: 500,

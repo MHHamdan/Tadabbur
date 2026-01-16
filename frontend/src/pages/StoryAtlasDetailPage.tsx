@@ -612,15 +612,13 @@ function EventCard({
               </h4>
               <div className="flex flex-wrap gap-1">
                 {event.semantic_tags.map((tag, i) => {
-                  const { text: translatedTag, isMissing: needsTranslation } = translateTag(tag, language);
+                  const { text: translatedTag } = translateTag(tag, language);
                   return (
                     <span
                       key={i}
-                      className={`text-xs px-2 py-0.5 rounded ${needsTranslation ? 'bg-amber-50 text-amber-700' : 'bg-primary-50 text-primary-700'}`}
-                      title={needsTranslation ? 'ترجمة عربية ناقصة' : undefined}
+                      className="text-xs px-2 py-0.5 rounded bg-primary-50 text-primary-700"
                     >
                       {translatedTag}
-                      {needsTranslation && <span className="text-amber-500 mr-1">*</span>}
                     </span>
                   );
                 })}
@@ -754,15 +752,13 @@ function KGEventCard({
               </h4>
               <div className="flex flex-wrap gap-1">
                 {event.semantic_tags.map((tag, i) => {
-                  const { text: translatedTag, isMissing: needsTranslation } = translateTag(tag, language);
+                  const { text: translatedTag } = translateTag(tag, language);
                   return (
                     <span
                       key={i}
-                      className={`text-xs px-2 py-0.5 rounded ${needsTranslation ? 'bg-amber-50 text-amber-700' : 'bg-primary-50 text-primary-700'}`}
-                      title={needsTranslation ? 'ترجمة عربية ناقصة' : undefined}
+                      className="text-xs px-2 py-0.5 rounded bg-primary-50 text-primary-700"
                     >
                       {translatedTag}
-                      {needsTranslation && <span className="text-amber-500 mr-1">*</span>}
                     </span>
                   );
                 })}

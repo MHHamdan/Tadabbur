@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Book, Users, Tag, ArrowRight } from 'lucide-react';
+import { Book, Users, ArrowRight } from 'lucide-react';
 import { useLanguageStore } from '../stores/languageStore';
 import { t, translateCategory, translateTheme, translateFigure } from '../i18n/translations';
 import { storiesApi, Story } from '../lib/api';

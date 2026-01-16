@@ -12,7 +12,7 @@
  * - Infinite scroll ready
  */
 
-import { useState, useCallback, useMemo, memo, useEffect } from 'react';
+import { useState, useCallback, memo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -25,10 +25,8 @@ import {
   Calendar,
   Library,
   Eye,
-  Star,
   AlertCircle,
   X,
-  RefreshCw,
 } from 'lucide-react';
 import { useLanguageStore } from '../../stores/languageStore';
 import {
@@ -152,11 +150,10 @@ function useBookSearch(filters: BookFilters, searchQuery: string) {
   }, [filters, searchQuery]);
 
   const {
-    isLoading,
+    isPending,
     error,
     execute: executeSearch,
   } = useAsync(searchBooks, {
-    immediate: false,
     onSuccess: (data) => setState(data),
   });
 
@@ -173,12 +170,10 @@ function useBookSearch(filters: BookFilters, searchQuery: string) {
   );
 
   const {
-    isLoading: loadingCollection,
+    isPending: loadingCollection,
     error: collectionError,
     execute: executeLoadCollection,
-  } = useAsync(loadCollection, {
-    immediate: false,
-  });
+  } = useAsync(loadCollection);
 
   // Load popular books on mount
   useEffect(() => {
@@ -187,7 +182,7 @@ function useBookSearch(filters: BookFilters, searchQuery: string) {
 
   return {
     ...state,
-    isLoading: isLoading || loadingCollection,
+    isLoading: isPending || loadingCollection,
     error: error || collectionError,
     search: executeSearch,
     loadCollection: executeLoadCollection,
@@ -534,16 +529,7 @@ const BooksGrid = memo(function BooksGrid({ books, isLoading, isArabic }: BooksG
   }
 
   if (books.length === 0) {
-    return (
-      <NoSearchResults
-        title={isArabic ? 'لا توجد نتائج' : 'No results found'}
-        description={
-          isArabic
-            ? 'جرب البحث بكلمات مختلفة أو غير الفلاتر'
-            : 'Try different search terms or adjust filters'
-        }
-      />
-    );
+    return <NoSearchResults className="my-8" />;
   }
 
   return (
@@ -677,16 +663,8 @@ function IslamicBooksPageContent() {
       {error && (
         <div className="mb-6">
           <InlineError
-            message={isArabic ? 'فشل في تحميل الكتب' : 'Failed to load books'}
-            action={
-              <button
-                onClick={handleSearch}
-                className="inline-flex items-center gap-2 text-sm text-amber-600 hover:text-amber-700 font-medium focus:outline-none focus:underline"
-              >
-                <RefreshCw className="w-4 h-4" aria-hidden="true" />
-                {isArabic ? 'إعادة المحاولة' : 'Try again'}
-              </button>
-            }
+            error={isArabic ? 'فشل في تحميل الكتب' : 'Failed to load books'}
+            onRetry={handleSearch}
           />
         </div>
       )}

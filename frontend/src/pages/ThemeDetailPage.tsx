@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import {
   BookOpen, ArrowLeft, Tag, Layers, BookMarked, CheckCircle,
   AlertCircle, ChevronRight, ExternalLink, Moon, Sun, Filter,
-  BarChart3, Target, Search, HelpCircle, X
+  BarChart3, HelpCircle, X
 } from 'lucide-react';
 import { useLanguageStore } from '../stores/languageStore';
 import { t } from '../i18n/translations';
@@ -135,9 +135,11 @@ export function ThemeDetailPage() {
       setTheme(themeRes.data);
       setSegments(segmentsRes.data.segments);
       // Backend returns array directly, not {consequences: [...]}
-      setConsequences(Array.isArray(consequencesRes.data) ? consequencesRes.data : consequencesRes.data.consequences || []);
+      const consequencesData = consequencesRes.data as unknown;
+      setConsequences(Array.isArray(consequencesData) ? consequencesData as ThemeConsequence[] : (consequencesData as { consequences?: ThemeConsequence[] })?.consequences || []);
       // Backend returns array directly, not {themes: [...]}
-      setRelatedThemes(Array.isArray(relatedRes.data) ? relatedRes.data : relatedRes.data.themes || []);
+      const relatedData = relatedRes.data as unknown;
+      setRelatedThemes(Array.isArray(relatedData) ? relatedData as QuranicTheme[] : (relatedData as { themes?: QuranicTheme[] })?.themes || []);
       setCoverage(coverageRes.data);
     } catch (error) {
       console.error('Failed to load theme:', error);

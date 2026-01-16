@@ -218,6 +218,9 @@ export interface StorySegment {
   verse_reference: string;
   summary_ar: string | null;
   summary_en: string | null;
+  semantic_tags?: string[];
+  narrative_role?: string;
+  is_entry_point?: boolean;
 }
 
 export interface StoryDetail extends Story {
@@ -1824,7 +1827,7 @@ export interface SemanticSearchResponse {
   };
 }
 
-export interface SimilarVersesResponse {
+export interface SemanticSimilarVersesResponse {
   ok: boolean;
   source_verse: string;
   similar_verses: SemanticSearchResult[];

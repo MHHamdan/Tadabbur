@@ -230,18 +230,18 @@ export function SemanticSearchPanel({
                       {language === 'ar' ? hit.content_ar : hit.content}
                     </div>
                   )}
-                  {hit.metadata?.category && (
+                  {hit.metadata?.category ? (
                     <div className="result-meta">
                       <span className="category-badge">
                         {String(hit.metadata.category)}
                       </span>
-                      {hit.metadata.matched_via && (
+                      {hit.metadata.matched_via ? (
                         <span className="match-type">
                           via {String(hit.metadata.matched_via)}
                         </span>
-                      )}
+                      ) : null}
                     </div>
-                  )}
+                  ) : null}
                 </div>
               ))
             )}

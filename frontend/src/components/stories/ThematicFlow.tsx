@@ -49,7 +49,7 @@ export function ThematicFlow({ segments, language, themes }: ThematicFlowProps) 
     // Track where each theme appears
     segments.forEach((segment, segIndex) => {
       const segmentThemes = segment.semantic_tags || [];
-      segmentThemes.forEach(theme => {
+      segmentThemes.forEach((theme: string) => {
         if (!allThemes.has(theme)) {
           allThemes.set(theme, []);
         }
@@ -231,7 +231,7 @@ export function ThematicFlow({ segments, language, themes }: ThematicFlowProps) 
             : 'Themes that appear together in the same segments'}
         </p>
         <div className="flex flex-wrap gap-2">
-          {getCoOccurringThemes(segments, language).slice(0, 6).map(([pair, count], i) => (
+          {getCoOccurringThemes(segments, language).slice(0, 6).map(([pair, count]) => (
             <div
               key={pair}
               className="bg-gradient-to-r from-primary-50 to-sky-50 border border-primary-100 rounded-lg px-3 py-2"

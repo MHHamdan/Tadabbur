@@ -100,7 +100,7 @@ services:
       - "8529:8000"
     command: start --log trace --user root --pass root memory
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:8000/health || exit 1"]
+      test: ["CMD", "/surreal", "isready", "--conn", "http://localhost:8000"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -171,23 +171,26 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      target: production
     container_name: tadabbur-frontend
     ports:
-      - "5000:3000"
+      - "3000:80"
     environment:
-      - DOCKER_ENV=true
-      - NODE_ENV=development
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 5s
+      retries: 3
     deploy:
       resources:
         limits:
           cpus: '1'
-          memory: 1G
+          memory: 256M
         reservations:
-          cpus: '0.5'
-          memory: 512M
+          cpus: '0.25'
+          memory: 64M
 
   rq-worker:
     build:

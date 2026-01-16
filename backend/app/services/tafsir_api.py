@@ -252,7 +252,7 @@ TAFSIR_EDITIONS: Dict[str, TafsirEditionInfo] = {
         has_audio=False,
         quran_com_id=93,
     ),
-    # English Tafseers
+    # English Tafseers (from Quran.com API v4)
     "ibn_kathir_en": TafsirEditionInfo(
         id="ibn_kathir_en",
         slug="ibn-kathir-en",
@@ -264,6 +264,42 @@ TAFSIR_EDITIONS: Dict[str, TafsirEditionInfo] = {
         source=TafsirSource.QURAN_COM,
         has_audio=False,
         quran_com_id=169,
+    ),
+    "en_ibn_kathir": TafsirEditionInfo(
+        id="en_ibn_kathir",
+        slug="ibn-kathir-en",
+        name_ar="تفسير ابن كثير (إنجليزي)",
+        name_en="Ibn Kathir (English)",
+        author_ar="ابن كثير",
+        author_en="Ibn Kathir",
+        language="en",
+        source=TafsirSource.QURAN_COM,
+        has_audio=False,
+        quran_com_id=169,
+    ),
+    "en_maarif": TafsirEditionInfo(
+        id="en_maarif",
+        slug="maarif-al-quran",
+        name_ar="معارف القرآن",
+        name_en="Ma'arif al-Qur'an",
+        author_ar="المفتي محمد شفيع",
+        author_en="Mufti Muhammad Shafi",
+        language="en",
+        source=TafsirSource.QURAN_COM,
+        has_audio=False,
+        quran_com_id=168,
+    ),
+    "en_tazkirul": TafsirEditionInfo(
+        id="en_tazkirul",
+        slug="tazkirul-quran",
+        name_ar="تذكير القرآن",
+        name_en="Tazkirul Quran",
+        author_ar="مولانا وحيد الدين خان",
+        author_en="Maulana Wahiduddin Khan",
+        language="en",
+        source=TafsirSource.QURAN_COM,
+        has_audio=False,
+        quran_com_id=817,
     ),
 }
 

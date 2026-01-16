@@ -1,19 +1,22 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Language } from '../i18n/translations';
+import { Language, t as translateFn } from '../i18n/translations';
 
 interface LanguageState {
   language: Language;
   direction: 'ltr' | 'rtl';
   setLanguage: (lang: Language) => void;
   toggleLanguage: () => void;
+  t: (key: string) => string;
 }
 
 export const useLanguageStore = create<LanguageState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       language: 'en',
       direction: 'ltr',
+
+      t: (key: string) => translateFn(key, get().language),
 
       setLanguage: (lang: Language) => {
         const dir = lang === 'ar' ? 'rtl' : 'ltr';

@@ -959,9 +959,7 @@ export const figureTranslations: Record<string, { ar: string; en: string }> = {
   "ʿĀd": { ar: 'عاد', en: "ʿĀd" },
   'People of Lut': { ar: 'قوم لوط', en: 'People of Lut' },
   'Wife of Lut': { ar: 'امرأة لوط', en: 'Wife of Lut' },
-  "People of 'Ad": { ar: 'قوم عاد', en: "People of 'Ad" },
   'Thamūd': { ar: 'ثمود', en: 'Thamūd' },
-  'People of Madyan': { ar: 'قوم مدين', en: 'People of Madyan' },
   'Ashab al-Aykah': { ar: 'أصحاب الأيكة', en: 'Ashab al-Aykah' },
   'People of Yunus': { ar: 'قوم يونس', en: 'People of Yunus' },
   'Yajuj wa Majuj': { ar: 'يأجوج ومأجوج', en: 'Yajuj wa Majuj' },
@@ -976,8 +974,6 @@ export const figureTranslations: Record<string, { ar: string; en: string }> = {
   Ifrit: { ar: 'العفريت', en: 'Ifrit' },
   'One with Knowledge': { ar: 'الذي عنده علم من الكتاب', en: 'One with Knowledge' },
   "Luqman's Son": { ar: 'ابن لقمان', en: "Luqman's Son" },
-  'Habil (Abel)': { ar: 'هابيل', en: 'Habil (Abel)' },
-  'Qabil (Cain)': { ar: 'قابيل', en: 'Qabil (Cain)' },
   هابيل: { ar: 'هابيل', en: 'Habil (Abel)' },
   قابيل: { ar: 'قابيل', en: 'Qabil (Cain)' },
   ذو_القرنين: { ar: 'ذو القرنين', en: 'Dhul-Qarnayn' },
@@ -1296,6 +1292,7 @@ export const aspectTranslations: Record<string, { ar: string; en: string }> = {
   tafseer_qurtubi: { ar: 'تفسير القرطبي', en: 'Tafsir Al-Qurtubi' },
   tafseer_tabari: { ar: 'تفسير الطبري', en: 'Tafsir At-Tabari' },
   tafseer_baghawi: { ar: 'تفسير البغوي', en: 'Tafsir Al-Baghawi' },
+  tafseer_saadi: { ar: 'تفسير السعدي', en: 'Tafsir As-Saadi' },
   tafseer_sahih: { ar: 'الترجمة الصحيحة', en: 'Sahih International' },
   tafseer_pickthall: { ar: 'ترجمة بيكثال', en: 'Pickthall Translation' },
   tafseer_yusufali: { ar: 'ترجمة يوسف علي', en: 'Yusuf Ali Translation' },
@@ -1318,6 +1315,156 @@ export const aspectTranslations: Record<string, { ar: string; en: string }> = {
   admin_reviewed: { ar: 'تمت المراجعة', en: 'Reviewed' },
   admin_flag: { ar: 'إبلاغ', en: 'Flag' },
   admin_flag_reason: { ar: 'سبب الإبلاغ', en: 'Flag Reason' },
+
+  // =============================================================================
+  // Mushaf Page - المصحف
+  // =============================================================================
+  mushaf_title: { ar: 'المصحف الشريف', en: 'Holy Mushaf' },
+  mushaf_page: { ar: 'صفحة', en: 'Page' },
+  mushaf_juz: { ar: 'الجزء', en: 'Juz' },
+  mushaf_next_page: { ar: 'الصفحة التالية', en: 'Next Page' },
+  mushaf_prev_page: { ar: 'الصفحة السابقة', en: 'Previous Page' },
+  mushaf_zoom_in: { ar: 'تكبير', en: 'Zoom In' },
+  mushaf_zoom_out: { ar: 'تصغير', en: 'Zoom Out' },
+  mushaf_settings: { ar: 'الإعدادات', en: 'Settings' },
+  mushaf_tafsir: { ar: 'التفسير', en: 'Tafsir' },
+  mushaf_reciter: { ar: 'القارئ', en: 'Reciter' },
+  mushaf_listen: { ar: 'استماع', en: 'Listen' },
+  mushaf_pause: { ar: 'إيقاف', en: 'Pause' },
+  mushaf_stop: { ar: 'إيقاف', en: 'Stop' },
+  mushaf_verses: { ar: 'الآيات', en: 'Verses' },
+  mushaf_verses_range: { ar: 'الآيات من {start} إلى {end}', en: 'Verses {start} to {end}' },
+  mushaf_load_failed: { ar: 'فشل في تحميل الصفحة', en: 'Failed to load page' },
+  mushaf_retry: { ar: 'إعادة المحاولة', en: 'Retry' },
+
+  // =============================================================================
+  // AI Assistant - المساعد الذكي
+  // =============================================================================
+  ai_assistant: { ar: 'المساعد الذكي', en: 'AI Assistant' },
+  ai_summary: { ar: 'ملخص', en: 'Summary' },
+  ai_explain: { ar: 'شرح', en: 'Explain' },
+  ai_qa: { ar: 'سؤال وجواب', en: 'Q&A' },
+  ai_generate_summary: { ar: 'إنشاء ملخص التفسير', en: 'Generate Tafsir Summary' },
+  ai_select_verse: { ar: 'اختر آية للبدء', en: 'Select a verse to start' },
+  ai_select_word: { ar: 'حدد كلمة للشرح', en: 'Select a word to explain' },
+  ai_select_word_hint: { ar: 'حدد كلمة من الآية أعلاه أو اكتب كلمة للشرح', en: 'Select a word from the verse above or type a word to explain' },
+  ai_enter_word: { ar: 'أدخل كلمة...', en: 'Enter a word...' },
+  ai_explanation_of: { ar: 'شرح "{word}"', en: 'Explanation of "{word}"' },
+  ai_ask_question: { ar: 'اسأل سؤالاً عن الآية...', en: 'Ask a question about the verse...' },
+  ai_suggested_questions: { ar: 'أسئلة مقترحة:', en: 'Suggested questions:' },
+  ai_question_revelation: { ar: 'ما سبب نزول هذه الآية؟', en: 'What is the reason for revelation?' },
+  ai_question_lessons: { ar: 'ما الدروس المستفادة؟', en: 'What are the lessons learned?' },
+  ai_question_context: { ar: 'ما علاقة الآية بما قبلها؟', en: 'How does this relate to previous verses?' },
+  ai_unavailable: { ar: 'خدمة الذكاء الاصطناعي غير متاحة', en: 'AI service unavailable' },
+  ai_timeout: { ar: 'انتهت مهلة الطلب', en: 'Request timeout' },
+  ai_open_tafsir_first: { ar: 'افتح التفسير أولاً', en: 'Open tafsir first' },
+
+  // =============================================================================
+  // Tafsir Audio - التفسير الصوتي
+  // =============================================================================
+  tafsir_listen: { ar: 'استماع للتفسير', en: 'Listen to Tafsir' },
+  tafsir_audio_available: { ar: 'التفسير الصوتي متاح', en: 'Audio tafsir available' },
+  tafsir_no_audio: { ar: 'لا يوجد صوت للتفسير', en: 'No audio available for this tafsir' },
+  tafsir_failed: { ar: 'فشل في تحميل التفسير', en: 'Failed to load tafsir' },
+
+  // =============================================================================
+  // Quran Page - صفحة القرآن
+  // =============================================================================
+  quran_surah: { ar: 'السورة', en: 'Surah' },
+  quran_page: { ar: 'الصفحة', en: 'Page' },
+  quran_juz: { ar: 'الجزء', en: 'Juz' },
+  quran_view_surah: { ar: 'سورة', en: 'Surah' },
+  quran_view_page: { ar: 'صفحة', en: 'Page' },
+  quran_view_mushaf: { ar: 'المصحف', en: 'Mushaf' },
+  quran_view_list: { ar: 'قائمة', en: 'List' },
+  quran_grammar: { ar: 'إعراب', en: 'Grammar' },
+  quran_similar: { ar: 'آيات متشابهة', en: 'Similar Verses' },
+  quran_back_stories: { ar: 'العودة للقصص', en: 'Back to Stories' },
+  quran_bismillah: { ar: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', en: 'In the name of Allah, the Most Gracious, the Most Merciful' },
+
+  // =============================================================================
+  // Ask Page - صفحة اسأل
+  // =============================================================================
+  ask_clear_chat: { ar: 'مسح المحادثة', en: 'Clear chat' },
+  ask_tafsir_sources: { ar: 'مصادر التفسير', en: 'Tafsir Sources' },
+  ask_select_all: { ar: 'اختر الكل', en: 'Select All' },
+  ask_clear_all: { ar: 'إلغاء الكل', en: 'Clear All' },
+  ask_searching: { ar: 'جاري البحث...', en: 'Searching...' },
+  ask_followup: { ar: 'اطرح سؤال متابعة...', en: 'Ask a follow-up question...' },
+  ask_navigate: { ar: 'للتنقل', en: 'to navigate' },
+  ask_select: { ar: 'للاختيار', en: 'to select' },
+  ask_close_hint: { ar: 'للإغلاق', en: 'to close' },
+  ask_select_source: { ar: 'يرجى اختيار مصدر تفسير واحد على الأقل', en: 'Please select at least one tafsir source' },
+
+  // =============================================================================
+  // Stories Page - صفحة القصص
+  // =============================================================================
+  stories_category_all: { ar: 'الكل', en: 'All' },
+  stories_category_prophet: { ar: 'قصص الأنبياء', en: 'Prophets Stories' },
+  stories_category_people: { ar: 'قصص الأقوام', en: 'People Stories' },
+  stories_category_event: { ar: 'الأحداث', en: 'Events' },
+  stories_no_stories: { ar: 'لا توجد قصص متاحة حالياً', en: 'No stories available yet' },
+  stories_run_seed: { ar: 'قم بتشغيل seed_stories.py لإضافة البيانات', en: 'Run seed_stories.py to add data' },
+  stories_view_story: { ar: 'عرض القصة', en: 'View Story' },
+
+  // =============================================================================
+  // Common Actions - الإجراءات الشائعة
+  // =============================================================================
+  action_copy: { ar: 'نسخ', en: 'Copy' },
+  action_copied: { ar: 'تم النسخ', en: 'Copied' },
+  action_cancel: { ar: 'إلغاء', en: 'Cancel' },
+  action_confirm: { ar: 'تأكيد', en: 'Confirm' },
+  action_save: { ar: 'حفظ', en: 'Save' },
+  action_delete: { ar: 'حذف', en: 'Delete' },
+  action_edit: { ar: 'تعديل', en: 'Edit' },
+  action_view: { ar: 'عرض', en: 'View' },
+  action_back: { ar: 'رجوع', en: 'Back' },
+  action_next: { ar: 'التالي', en: 'Next' },
+  action_previous: { ar: 'السابق', en: 'Previous' },
+  action_refresh: { ar: 'تحديث', en: 'Refresh' },
+  to: { ar: 'إلى', en: 'to' },
+  from: { ar: 'من', en: 'from' },
+
+  // =============================================================================
+  // Language Toggle
+  // =============================================================================
+  lang_toggle_ar: { ar: 'العربية', en: 'العربية' },
+  lang_toggle_en: { ar: 'English', en: 'English' },
+
+  // =============================================================================
+  // English Tafsir Editions
+  // =============================================================================
+  tafseer_ibn_kathir_en: { ar: 'تفسير ابن كثير (إنجليزي)', en: 'Ibn Kathir (English)' },
+  tafseer_maarif: { ar: 'معارف القرآن', en: "Ma'arif al-Qur'an" },
+  tafseer_tazkirul: { ar: 'تذكير القرآن', en: 'Tazkirul Quran' },
+
+  // =============================================================================
+  // Reciter Names
+  // =============================================================================
+  reciter_mishary: { ar: 'مشاري العفاسي', en: 'Mishary Al-Afasy' },
+  reciter_abdul_basit: { ar: 'عبد الباسط عبد الصمد', en: 'Abdul Basit' },
+  reciter_husary: { ar: 'محمود خليل الحصري', en: 'Al-Husary' },
+  reciter_maher: { ar: 'ماهر المعيقلي', en: 'Maher Al-Muaiqly' },
+  reciter_shuraim: { ar: 'سعود الشريم', en: 'Saud Al-Shuraim' },
+
+  // =============================================================================
+  // Concepts Page - صفحة المفاهيم
+  // =============================================================================
+  concepts_back: { ar: 'العودة للمفاهيم', en: 'Back to Concepts' },
+  concepts_click_details: { ar: 'اضغط للتفاصيل', en: 'Click for details' },
+
+  // =============================================================================
+  // Tools Page - صفحة الأدوات
+  // =============================================================================
+  tools_prayer_times: { ar: 'مواقيت الصلاة', en: 'Prayer Times' },
+  tools_hijri_calendar: { ar: 'التقويم الهجري', en: 'Hijri Calendar' },
+  tools_zakat: { ar: 'حاسبة الزكاة', en: 'Zakat Calculator' },
+  tools_mosque_finder: { ar: 'البحث عن المساجد', en: 'Mosque Finder' },
+  tools_videos: { ar: 'فيديوهات إسلامية', en: 'Islamic Videos' },
+  tools_news: { ar: 'أخبار إسلامية', en: 'Islamic News' },
+  tools_books: { ar: 'كتب إسلامية', en: 'Islamic Books' },
+  tools_hajj: { ar: 'دليل الحج والعمرة', en: 'Hajj & Umrah Guide' },
+  tools_search: { ar: 'البحث الإسلامي', en: 'Islamic Web Search' },
 };
 
 export function t(key: string, language: Language): string {

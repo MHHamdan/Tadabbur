@@ -40,7 +40,7 @@ import {
 import { useGeolocation } from '../../hooks/useGeolocation';
 import { useAsync } from '../../hooks/useAsync';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { useDebouncedCallback } from '../../hooks/useDebounce';
+// useDebouncedCallback available from '../../hooks/useDebounce' if needed
 import { ErrorBoundary, InlineError } from '../../components/ui/ErrorBoundary';
 import { SkeletonPrayerTimes } from '../../components/ui/Skeleton';
 import { LocationDenied } from '../../components/ui/EmptyState';
@@ -293,13 +293,14 @@ interface PrayerCardProps {
 }
 
 const PrayerCard = memo(function PrayerCard({
-  prayerKey,
+  prayerKey: _prayerKey,
   prayer,
   time,
   isNext,
   use24Hour,
   isArabic,
 }: PrayerCardProps) {
+  void _prayerKey; // Reserved for future use (e.g., analytics)
   const Icon = prayer.icon;
 
   return (

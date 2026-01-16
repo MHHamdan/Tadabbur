@@ -10,7 +10,7 @@ import { useSearchHistoryStore } from '../stores/searchHistoryStore';
 import { t } from '../i18n/translations';
 import {
   quranApi, EnhancedSearchResponse, SearchMatch, WordAnalyticsResponse,
-  SimilarVersesResponse, ThematicConnectionsResponse, ConceptEvolutionResponse,
+  SimilarVersesResponse, ConceptEvolutionResponse,
   ThemeInfo
 } from '../lib/api';
 import clsx from 'clsx';
@@ -227,7 +227,7 @@ const AUTOCOMPLETE_SUGGESTIONS = [
 
 export function SearchPage() {
   const { language } = useLanguageStore();
-  const { recordSearch, recordVerseClick } = useSearchHistoryStore();
+  const { recordSearch, recordVerseClick: _recordVerseClick } = useSearchHistoryStore();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<EnhancedSearchResponse | null>(null);
   const [analytics, setAnalytics] = useState<WordAnalyticsResponse | null>(null);
@@ -1376,7 +1376,7 @@ function SimilarVersesPanel({
             <div className="text-sm font-medium text-gray-700">
               {language === 'ar' ? `${data.total_found} آية مشابهة` : `${data.total_found} similar verses found`}
             </div>
-            {data.similar_verses.map((verse, idx) => (
+            {data.similar_verses.map((verse) => (
               <div
                 key={`${verse.sura_no}-${verse.aya_no}`}
                 className="p-3 bg-white rounded-lg border border-gray-200 hover:border-purple-300 transition-colors"

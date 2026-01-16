@@ -8,7 +8,6 @@ import {
   ArrowRight,
   Sparkles,
   ChevronRight,
-  RefreshCw,
 } from 'lucide-react';
 import { useLanguageStore } from '../stores/languageStore';
 import { conceptsApi, MiracleWithAssociations, ConceptSummary } from '../lib/api';
