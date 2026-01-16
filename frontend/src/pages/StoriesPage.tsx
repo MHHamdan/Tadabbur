@@ -10,6 +10,7 @@ const CATEGORIES = [
   { id: 'all', labelAr: 'الكل', labelEn: 'All' },
   { id: 'prophet', labelAr: 'قصص الأنبياء', labelEn: 'Prophets' },
   { id: 'nation', labelAr: 'قصص الأمم', labelEn: 'Nations' },
+  { id: 'righteous', labelAr: 'الصالحين', labelEn: 'Righteous' },
   { id: 'parable', labelAr: 'الأمثال', labelEn: 'Parables' },
   { id: 'historical', labelAr: 'تاريخية', labelEn: 'Historical' },
 ];

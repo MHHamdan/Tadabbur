@@ -15,13 +15,15 @@ DATABASE_URL_ASYNC = settings.database_url.replace(
     "postgresql://", "postgresql+asyncpg://"
 )
 
-# Async engine for FastAPI
+# Async engine for FastAPI - optimized for performance
 async_engine = create_async_engine(
     DATABASE_URL_ASYNC,
-    echo=settings.debug,
+    echo=False,  # Disable SQL logging in production for performance
     pool_pre_ping=True,
-    pool_size=10,
-    max_overflow=20,
+    pool_size=25,  # Increased from 10 for higher concurrency
+    max_overflow=50,  # Increased from 20 for burst traffic
+    pool_recycle=3600,  # Recycle connections every hour to prevent stale connections
+    pool_timeout=30,  # Wait up to 30s for a connection
 )
 
 # Sync engine for Alembic migrations and scripts

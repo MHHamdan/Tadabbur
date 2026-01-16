@@ -56,9 +56,11 @@ Any modification to these rules requires:
 import re
 import time
 import logging
-from typing import List, Optional
+from typing import List, Optional, Dict
+from collections import defaultdict
 
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import text
 
 from app.core.config import settings
 from app.rag.types import (
@@ -66,12 +68,14 @@ from app.rag.types import (
     RetrievedChunk,
     Citation,
     GroundedResponse,
+    RelatedVerse,
+    TafsirExplanation,
     SAFE_REFUSAL_INSUFFICIENT,
     SAFE_REFUSAL_NO_SOURCES,
     SAFE_REFUSAL_FIQH,
     RAG_SUPPORTED_LANGUAGES,
 )
-from app.rag.retrieval import HybridRetriever
+from app.rag.retrieval import HybridRetriever, extract_verse_reference, FAMOUS_VERSES
 from app.rag.prompts import GROUNDED_SYSTEM_PROMPT, build_user_prompt
 from app.rag.query_expander import expand_query, ExpandedQuery
 from app.rag.confidence import confidence_scorer, get_confidence_message, ConfidenceBreakdown
@@ -109,13 +113,154 @@ class RAGPipeline:
             llm_provider = LLMProvider(settings.llm_provider)
 
         try:
-            self.llm = get_llm(provider=llm_provider)
+            # Use fast model for RAG if configured
+            ollama_model = None
+            if llm_provider == LLMProvider.OLLAMA and settings.ollama_rag_use_fast_model:
+                ollama_model = settings.ollama_model_fast
+                logger.info(f"RAG Pipeline using fast model: {ollama_model}")
+
+            self.llm = get_llm(provider=llm_provider, ollama_model=ollama_model)
             self.llm_provider = llm_provider
-            logger.info(f"RAG Pipeline initialized with {llm_provider.value} provider")
+            self.max_tokens = settings.ollama_rag_max_tokens  # Use RAG-specific token limit
+            logger.info(f"RAG Pipeline initialized with {llm_provider.value} provider (max_tokens={self.max_tokens})")
         except Exception as e:
             logger.warning(f"Failed to initialize {llm_provider}: {e}")
             self.llm = None
             self.llm_provider = None
+            self.max_tokens = 1500  # Default
+
+    async def _try_fast_path_verse_query(
+        self,
+        question: str,
+        language: str,
+        preferred_sources: List[str] = None,
+        session_id: Optional[str] = None,
+    ) -> Optional[GroundedResponse]:
+        """
+        Fast-path for direct verse queries (e.g., "ما معنى آية الكرسي؟").
+
+        Skips LLM entirely and returns tafsir directly from database.
+        This is MUCH faster and avoids hallucination for known verses.
+
+        Returns:
+            GroundedResponse if fast-path applicable, None otherwise
+        """
+        import time
+        start_time = time.time()
+
+        # Check if query mentions a famous verse
+        verse_ref = extract_verse_reference(question)
+        if not verse_ref:
+            return None
+
+        sura_no, aya_start, aya_end = verse_ref
+        logger.info(f"[FAST-PATH] Detected verse {sura_no}:{aya_start}, attempting fast-path")
+
+        # Direct database lookup
+        chunks = await self.retriever._direct_verse_lookup(
+            sura_no=sura_no,
+            aya_start=aya_start,
+            aya_end=aya_end,
+            language=language,
+            preferred_sources=preferred_sources,
+        )
+
+        if not chunks or len(chunks) < 2:
+            # Not enough direct results, fall back to full pipeline
+            logger.info(f"[FAST-PATH] Only {len(chunks)} chunks, falling back to full pipeline")
+            return None
+
+        logger.info(f"[FAST-PATH] Found {len(chunks)} tafsir chunks, building response")
+
+        # Build verse reference string
+        verse_ref_str = f"{sura_no}:{aya_start}"
+        if aya_end and aya_end != aya_start:
+            verse_ref_str = f"{sura_no}:{aya_start}-{aya_end}"
+
+        # Get verse text from database
+        related_verses = await self._extract_related_verses(chunks, language)
+
+        # Group tafsir by source
+        tafsir_by_source = self._group_tafsir_by_source(chunks, language)
+
+        # Build answer summary from tafsir (no LLM needed)
+        answer_parts = []
+
+        # Get verse name if known
+        verse_name = None
+        for name, ref in FAMOUS_VERSES.items():
+            if isinstance(ref, tuple) and len(ref) >= 2:
+                if ref[0] == sura_no and ref[1] == aya_start:
+                    # Prefer Arabic name for Arabic responses
+                    if language == "ar" and any(ord(c) > 0x600 for c in name):
+                        verse_name = name
+                        break
+                    elif language == "en" and not any(ord(c) > 0x600 for c in name):
+                        verse_name = name
+                        break
+
+        if language == "ar":
+            if verse_name:
+                answer_parts.append(f"**{verse_name}** هي الآية {aya_start} من سورة البقرة.")
+            answer_parts.append(f"\nفيما يلي شروحات العلماء لهذه الآية الكريمة من مصادر التفسير المعتمدة:")
+            answer_parts.append(f"\n\n**عدد المصادر المتوفرة:** {len(tafsir_by_source)} تفسير")
+        else:
+            if verse_name:
+                answer_parts.append(f"**{verse_name.replace('-', ' ').title()}** is verse {aya_start} of Surah Al-Baqarah.")
+            answer_parts.append(f"\nBelow are scholarly explanations of this noble verse from authentic tafsir sources:")
+            answer_parts.append(f"\n\n**Available sources:** {len(tafsir_by_source)} tafsir")
+
+        answer = "".join(answer_parts)
+
+        # Build citations from chunks
+        citations = []
+        for chunk in chunks[:5]:
+            citations.append(Citation(
+                chunk_id=chunk.chunk_id,
+                source_id=chunk.source_id,
+                source_name=chunk.source_name,
+                source_name_ar=chunk.source_name_ar,
+                verse_reference=chunk.verse_reference,
+                excerpt=chunk.content[:200] + "..." if len(chunk.content) > 200 else chunk.content,
+                relevance_score=chunk.relevance_score,
+            ))
+
+        # Generate follow-up suggestions
+        follow_ups = []
+        if language == "ar":
+            follow_ups = [
+                f"ما فضل {verse_name or 'هذه الآية'}؟",
+                f"ما معنى الحي القيوم؟",
+                f"ما هو الكرسي في القرآن؟",
+            ]
+        else:
+            follow_ups = [
+                f"What are the virtues of {verse_name or 'this verse'}?",
+                "What does Al-Hayy Al-Qayyum mean?",
+                "What is the Kursi (Throne) in the Quran?",
+            ]
+
+        processing_time = int((time.time() - start_time) * 1000)
+        logger.info(f"[FAST-PATH] Response built in {processing_time}ms")
+
+        return GroundedResponse(
+            answer=answer,
+            citations=citations,
+            confidence=0.95,  # High confidence for direct lookup
+            intent=QueryIntent.VERSE_MEANING.value,
+            warnings=[],
+            query_expansion=None,
+            session_id=session_id,
+            related_verses=related_verses,
+            tafsir_by_source=tafsir_by_source,
+            follow_up_suggestions=follow_ups,
+            scholarly_consensus="Direct tafsir lookup - no synthesis required",
+            evidence_chunk_count=len(chunks),
+            evidence_source_count=len(tafsir_by_source),
+            evidence=chunks[:5],  # Include top chunks for transparency
+            processing_time_ms=processing_time,
+            api_version=settings.api_version,
+        )
 
     async def query(
         self,
@@ -124,6 +269,8 @@ class RAGPipeline:
         include_scholarly_debate: bool = True,
         preferred_sources: List[str] = None,
         max_sources: int = 5,
+        session_id: Optional[str] = None,
+        conversation_context: Optional[str] = None,
     ) -> GroundedResponse:
         """
         Process a question and return a grounded response.
@@ -134,9 +281,11 @@ class RAGPipeline:
             include_scholarly_debate: Include differing scholarly views
             preferred_sources: List of preferred tafseer source IDs
             max_sources: Maximum number of sources to retrieve
+            session_id: Optional session ID for conversation continuity
+            conversation_context: Optional context from previous conversation turns
 
         Returns:
-            GroundedResponse with answer, citations, and metadata
+            GroundedResponse with answer, citations, verses, tafsir_by_source, and metadata
 
         Note:
             RAG reasoning is only supported in Arabic (ar) and English (en).
@@ -146,6 +295,18 @@ class RAGPipeline:
         # Validate language - RAG only supports ar/en
         if language not in RAG_SUPPORTED_LANGUAGES:
             language = "en"  # Coerce to English (validation logged in retriever)
+
+        # FAST-PATH: Try direct verse lookup first (skips LLM entirely)
+        # This is much faster and avoids hallucination for famous verse queries
+        fast_response = await self._try_fast_path_verse_query(
+            question=question,
+            language=language,
+            preferred_sources=preferred_sources,
+            session_id=session_id,
+        )
+        if fast_response:
+            logger.info("[FAST-PATH] Returning direct tafsir response (LLM skipped)")
+            return fast_response
 
         # 1. Classify intent
         intent = await self._classify_intent(question)
@@ -175,11 +336,19 @@ class RAGPipeline:
                 intent=intent.value,
                 warnings=["No relevant sources found"],
                 query_expansion=expanded.expansion_applied if expanded.expansion_applied else None,
+                session_id=session_id,
+                related_verses=[],
+                tafsir_by_source={},
+                follow_up_suggestions=[],
                 api_version=settings.api_version,
             )
 
         # 6. Build context from retrieved chunks
         context = self._build_context(chunks, language)
+
+        # Add conversation context if provided (for follow-up questions)
+        if conversation_context:
+            context = conversation_context + "\n\n" + context
 
         # 7. Generate grounded response
         raw_response, llm_latency_ms = await self._generate_response(
@@ -199,6 +368,23 @@ class RAGPipeline:
             intent=intent,
             query_expansion=expanded,
         )
+
+        # 9. Extract related verses for verse-first display
+        related_verses = await self._extract_related_verses(chunks, language)
+
+        # 10. Group tafsir by source for accordion display
+        tafsir_by_source = self._group_tafsir_by_source(chunks, language)
+
+        # 11. Generate follow-up suggestions
+        follow_up_suggestions = self._generate_follow_up_suggestions(
+            question, intent, chunks, language
+        )
+
+        # Add new fields to response
+        validated.session_id = session_id
+        validated.related_verses = related_verses
+        validated.tafsir_by_source = tafsir_by_source
+        validated.follow_up_suggestions = follow_up_suggestions
 
         # Add LLM latency to processing time
         validated.processing_time_ms = llm_latency_ms
@@ -327,6 +513,196 @@ class RAGPipeline:
 
         return "".join(context_parts)
 
+    async def _extract_related_verses(
+        self,
+        chunks: List[RetrievedChunk],
+        language: str,
+    ) -> List[RelatedVerse]:
+        """
+        Extract unique Quranic verses from retrieved chunks.
+
+        Returns a list of RelatedVerse objects with Arabic text and translation.
+        """
+        # Collect unique verse references
+        verse_refs = {}  # sura_no, aya_no -> chunk with highest relevance
+        for chunk in chunks:
+            key = (chunk.sura_no, chunk.aya_start)
+            if key not in verse_refs or chunk.relevance_score > verse_refs[key].relevance_score:
+                verse_refs[key] = chunk
+
+        # Fetch verse texts from database
+        related_verses = []
+        for (sura_no, aya_no), chunk in sorted(verse_refs.items(), key=lambda x: -x[1].relevance_score)[:5]:
+            try:
+                # Query for verse text from quran_verses table
+                result = await self.session.execute(
+                    text("""
+                        SELECT v.text_uthmani, v.text_imlaei, v.sura_name_ar, v.sura_name_en,
+                               t.text as translation
+                        FROM quran_verses v
+                        LEFT JOIN translations t ON v.id = t.verse_id AND t.language = 'en'
+                        WHERE v.sura_no = :sura_no AND v.aya_no = :aya_no
+                        LIMIT 1
+                    """),
+                    {"sura_no": sura_no, "aya_no": aya_no}
+                )
+                row = result.fetchone()
+
+                if row:
+                    related_verses.append(RelatedVerse(
+                        sura_no=sura_no,
+                        aya_no=aya_no,
+                        verse_reference=f"{sura_no}:{aya_no}",
+                        text_ar=row[0] or row[1] or "",  # text_uthmani or text_imlaei
+                        text_en=row[4] or "",  # translation (may be empty)
+                        sura_name_ar=row[2],
+                        sura_name_en=row[3],
+                        topic=None,  # Could be enhanced with concept topics
+                        relevance_score=chunk.relevance_score,
+                    ))
+                else:
+                    # No verse found, create minimal reference
+                    related_verses.append(RelatedVerse(
+                        sura_no=sura_no,
+                        aya_no=aya_no,
+                        verse_reference=f"{sura_no}:{aya_no}",
+                        text_ar="",
+                        text_en="",
+                        relevance_score=chunk.relevance_score,
+                    ))
+            except Exception as e:
+                logger.warning(f"Failed to fetch verse {sura_no}:{aya_no}: {e}")
+                # Create verse reference without full text
+                related_verses.append(RelatedVerse(
+                    sura_no=sura_no,
+                    aya_no=aya_no,
+                    verse_reference=f"{sura_no}:{aya_no}",
+                    text_ar="",
+                    text_en="",
+                    relevance_score=chunk.relevance_score,
+                ))
+
+        return related_verses
+
+    def _group_tafsir_by_source(
+        self,
+        chunks: List[RetrievedChunk],
+        language: str,
+    ) -> Dict[str, List[TafsirExplanation]]:
+        """
+        Group tafsir explanations by source for accordion display.
+
+        Returns a dict mapping source_id to list of TafsirExplanation objects.
+        """
+        tafsir_by_source: Dict[str, List[TafsirExplanation]] = defaultdict(list)
+
+        for chunk in chunks:
+            # Get the appropriate content based on language
+            explanation = chunk.content_en if language == "en" else chunk.content_ar
+            if not explanation:
+                explanation = chunk.content_ar or chunk.content_en or ""
+
+            tafsir = TafsirExplanation(
+                source_id=chunk.source_id,
+                source_name=chunk.source_name,
+                source_name_ar=chunk.source_name_ar or chunk.source_name,
+                author_name=None,  # Could be enhanced with source metadata
+                methodology=chunk.methodology,
+                explanation=explanation[:1500],  # Truncate long explanations
+                verse_reference=chunk.verse_reference,
+                era="classical" if getattr(chunk, 'is_primary_source', True) else "modern",
+                reliability_score=getattr(chunk, 'source_reliability', 0.8),
+            )
+
+            tafsir_by_source[chunk.source_id].append(tafsir)
+
+        return dict(tafsir_by_source)
+
+    def _generate_follow_up_suggestions(
+        self,
+        question: str,
+        intent: QueryIntent,
+        chunks: List[RetrievedChunk],
+        language: str,
+    ) -> List[str]:
+        """
+        Generate follow-up question suggestions based on the query and retrieved content.
+
+        Returns a list of 3-5 suggested follow-up questions.
+        """
+        suggestions = []
+
+        # Extract verse references mentioned in chunks
+        verse_refs = set()
+        source_names = set()
+        for chunk in chunks[:5]:
+            verse_refs.add(chunk.verse_reference)
+            source_names.add(chunk.source_name if language == "en" else chunk.source_name_ar)
+
+        # Generate intent-specific suggestions
+        if language == "ar":
+            if intent == QueryIntent.VERSE_MEANING:
+                suggestions.extend([
+                    "ما هي الدروس المستفادة من هذه الآية؟",
+                    "ما هو سبب نزول هذه الآية؟",
+                ])
+                if verse_refs:
+                    ref = list(verse_refs)[0]
+                    suggestions.append(f"ما علاقة الآية {ref} بما قبلها وما بعدها؟")
+            elif intent == QueryIntent.STORY_EXPLORATION:
+                suggestions.extend([
+                    "ما هي العبر من هذه القصة؟",
+                    "أين ذُكرت هذه القصة في مواضع أخرى من القرآن؟",
+                ])
+            elif intent == QueryIntent.THEME_SEARCH:
+                suggestions.extend([
+                    "ما هي الآيات الأخرى المتعلقة بهذا الموضوع؟",
+                    "كيف تناول المفسرون هذا الموضوع؟",
+                ])
+            else:
+                suggestions.extend([
+                    "هل هناك آيات أخرى متعلقة؟",
+                    "ما رأي العلماء في هذه المسألة؟",
+                ])
+
+            # Add source-specific question
+            if source_names:
+                source = list(source_names)[0]
+                suggestions.append(f"ما قال {source} في تفسير هذا؟")
+
+        else:  # English
+            if intent == QueryIntent.VERSE_MEANING:
+                suggestions.extend([
+                    "What lessons can we learn from this verse?",
+                    "What is the context (asbab al-nuzul) of this verse?",
+                ])
+                if verse_refs:
+                    ref = list(verse_refs)[0]
+                    suggestions.append(f"How does verse {ref} relate to the verses around it?")
+            elif intent == QueryIntent.STORY_EXPLORATION:
+                suggestions.extend([
+                    "What are the lessons from this story?",
+                    "Where else is this story mentioned in the Quran?",
+                ])
+            elif intent == QueryIntent.THEME_SEARCH:
+                suggestions.extend([
+                    "What other verses relate to this topic?",
+                    "How do different scholars interpret this theme?",
+                ])
+            else:
+                suggestions.extend([
+                    "Are there other related verses?",
+                    "What do scholars say about this?",
+                ])
+
+            # Add source-specific question
+            if source_names:
+                source = list(source_names)[0]
+                suggestions.append(f"What does {source} say about this?")
+
+        # Limit to 5 suggestions
+        return suggestions[:5]
+
     async def _generate_response(
         self,
         question: str,
@@ -357,7 +733,7 @@ class RAGPipeline:
             response = await self.llm.generate(
                 system_prompt=GROUNDED_SYSTEM_PROMPT,
                 user_message=user_prompt,
-                max_tokens=2000,
+                max_tokens=self.max_tokens,  # Use configured RAG token limit
                 temperature=0.3,  # Lower for factual/grounded responses
             )
 
@@ -497,7 +873,6 @@ class RAGPipeline:
         source_ids = [chunk.source_id for chunk in chunks if hasattr(chunk, 'source_id')]
 
         # Calculate enhanced confidence score
-        print(f"[CONFIDENCE] valid_citations={len(citations)}, invalid={invalid_count}, paragraphs={len(paragraphs)}, with_citations={paragraphs_with_citations}")
         confidence_breakdown = confidence_scorer.calculate(
             total_paragraphs=len(paragraphs),
             paragraphs_with_citations=paragraphs_with_citations,

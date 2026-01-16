@@ -201,8 +201,10 @@ function ClusterCard({ cluster, language }: { cluster: StoryCluster; language: '
         {title}
       </h3>
 
-      {cluster.summary_en && !isArabic && (
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{cluster.summary_en}</p>
+      {(isArabic ? cluster.summary_ar : cluster.summary_en) && (
+        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+          {isArabic ? cluster.summary_ar : cluster.summary_en}
+        </p>
       )}
 
       {/* Main Persons */}

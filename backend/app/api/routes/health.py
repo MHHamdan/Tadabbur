@@ -150,6 +150,73 @@ async def readiness_check(
         return {"status": "not_ready"}
 
 
+@router.get("/metrics")
+async def prometheus_metrics():
+    """
+    Prometheus metrics endpoint.
+
+    PUBLIC: Exposes metrics in Prometheus format for scraping.
+    Includes:
+    - RAG query metrics (latency, cache hits, confidence)
+    - Search metrics (vector, keyword, hybrid)
+    - Cache metrics (hit rate, size)
+    - Reranker metrics (method, latency)
+    """
+    from fastapi.responses import Response
+    from app.services.metrics import metrics_endpoint_handler
+
+    output, content_type = metrics_endpoint_handler()
+    return Response(content=output, media_type=content_type)
+
+
+@router.get("/metrics/summary")
+async def metrics_summary():
+    """
+    Human-readable metrics summary.
+
+    Returns a JSON summary of key metrics for dashboard display.
+    """
+    from app.services.metrics import get_metrics, PROMETHEUS_AVAILABLE
+
+    if not PROMETHEUS_AVAILABLE:
+        return {
+            "ok": False,
+            "error": "Prometheus metrics not available",
+            "install": "pip install prometheus_client",
+        }
+
+    # Get cache stats from RAG cache
+    try:
+        from app.api.routes.rag import get_rag_cache
+        rag_cache = get_rag_cache()
+        cache_stats = rag_cache._stats
+        cache_info = {
+            "connected": cache_stats.connected,
+            "hits": cache_stats.hits,
+            "misses": cache_stats.misses,
+            "hit_rate": f"{cache_stats.hit_rate:.2%}",
+            "errors": cache_stats.errors,
+        }
+    except Exception as e:
+        cache_info = {"error": str(e)}
+
+    # Get reranker status
+    try:
+        from app.rag.reranker import is_reranker_available
+        reranker_info = is_reranker_available()
+    except Exception as e:
+        reranker_info = {"error": str(e)}
+
+    return {
+        "ok": True,
+        "metrics": {
+            "cache": cache_info,
+            "reranker": reranker_info,
+            "prometheus_enabled": PROMETHEUS_AVAILABLE,
+        }
+    }
+
+
 # ============================================================================
 # PROTECTED ENDPOINTS (gated in production)
 # ============================================================================
@@ -409,3 +476,112 @@ async def security_check(request: Request):
         ],
         "note": "In production, protected endpoints require X-Metrics-Secret header"
     }
+
+
+# ============================================================================
+# CACHE MONITORING ENDPOINTS
+# ============================================================================
+
+@router.get("/health/cache")
+async def cache_health_check(request: Request):
+    """
+    Check cache health and statistics.
+
+    PROTECTED IN PRODUCTION: Reveals cache configuration.
+    Requires X-Metrics-Secret header in production.
+    """
+    _check_production_auth(request)
+
+    cache_status = {
+        "status": "healthy",
+        "environment": "production" if is_production() else "development",
+        "caches": {},
+    }
+
+    # Check hybrid cache (L1 + L2)
+    try:
+        from app.services.redis_cache import get_hybrid_cache
+        hybrid = get_hybrid_cache()
+
+        cache_status["caches"]["hybrid"] = hybrid.get_stats()
+
+        # Overall health check
+        health = await hybrid.health_check()
+        cache_status["caches"]["health"] = health
+
+        if not health.get("overall_healthy", False):
+            cache_status["status"] = "degraded"
+
+    except ImportError:
+        cache_status["caches"]["hybrid"] = {"enabled": False, "error": "Module not available"}
+    except Exception as e:
+        cache_status["caches"]["hybrid"] = {"error": str(e)}
+        cache_status["status"] = "degraded"
+
+    # Check in-memory cache service
+    try:
+        from app.services.cache_service import cache_service
+        cache_status["caches"]["in_memory"] = cache_service.get_all_stats()
+    except Exception as e:
+        cache_status["caches"]["in_memory"] = {"error": str(e)}
+
+    return cache_status
+
+
+@router.post("/cache/warm")
+async def warm_cache(
+    request: Request,
+    include_surahs: bool = False,
+):
+    """
+    Trigger cache warming for popular content.
+
+    PROTECTED IN PRODUCTION: Administrative action.
+    Requires X-Metrics-Secret header in production.
+
+    Args:
+        include_surahs: Also warm full surah tafseer (slower)
+    """
+    _check_production_auth(request)
+
+    try:
+        from app.services.cache_warmer import run_cache_warming
+
+        result = await run_cache_warming(include_full_surahs=include_surahs)
+
+        return {
+            "ok": True,
+            "message": "Cache warming completed",
+            "result": {
+                "started_at": result.started_at.isoformat(),
+                "completed_at": result.completed_at.isoformat(),
+                "total_items": result.total_items,
+                "success_count": result.success_count,
+                "error_count": result.error_count,
+                "success_rate": round(result.success_rate * 100, 2),
+                "duration_ms": result.duration_ms,
+            }
+        }
+
+    except Exception as e:
+        return {
+            "ok": False,
+            "error": str(e),
+        }
+
+
+@router.get("/cache/warm/status")
+async def cache_warming_status(request: Request):
+    """
+    Get status of last cache warming operation.
+
+    PROTECTED IN PRODUCTION.
+    """
+    _check_production_auth(request)
+
+    try:
+        from app.services.cache_warmer import get_cache_warmer
+        warmer = get_cache_warmer()
+        return warmer.get_last_warming_result()
+    except Exception as e:
+        return {"status": "error", "error": str(e)}

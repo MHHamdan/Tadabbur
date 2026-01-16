@@ -894,6 +894,166 @@ STORY_CLUSTERS = [
         "lessons_ar": ["العلم أقوى من القوة", "الخضوع للحق"],
         "lessons_en": ["Knowledge is stronger than force", "Submission to truth"],
     },
+
+    # =========================================================================
+    # AL-ISRA (NIGHT JOURNEY)
+    # =========================================================================
+    {
+        "id": "cluster_isra_miraj",
+        "title_ar": "الإسراء والمعراج",
+        "title_en": "The Night Journey (Al-Isra)",
+        "short_title_ar": "الإسراء",
+        "short_title_en": "Night Journey",
+        "category": "prophet",
+        "main_persons": ["Muhammad"],
+        "groups": ["Angels", "Prophets"],
+        "tags": ["miracle", "journey", "ascension", "prayer", "blessing"],
+        "places": [
+            {"name": "Masjid al-Haram (Mecca)", "name_ar": "المسجد الحرام", "basis": "explicit"},
+            {"name": "Masjid al-Aqsa (Jerusalem)", "name_ar": "المسجد الأقصى", "basis": "explicit"}
+        ],
+        "era": "prophetic",
+        "era_basis": "explicit",
+        "time_description_en": "Occurred during the Meccan period, before the Hijrah",
+        "ayah_spans": [{"sura": 17, "start": 1, "end": 1}],
+        "primary_sura": 17,
+        "summary_ar": "رحلة النبي ﷺ الليلية من المسجد الحرام إلى المسجد الأقصى، ثم العروج إلى السماوات العلى",
+        "summary_en": "The Prophet's miraculous night journey from Mecca to Jerusalem, then ascension through the heavens.",
+        "lessons_ar": ["قدرة الله المطلقة", "مكانة المسجد الأقصى", "فرضية الصلاة"],
+        "lessons_en": ["Allah's absolute power", "Importance of Al-Aqsa", "Obligation of prayer established"],
+    },
+
+    # =========================================================================
+    # BATTLE OF BADR
+    # =========================================================================
+    {
+        "id": "cluster_badr",
+        "title_ar": "غزوة بدر الكبرى",
+        "title_en": "Battle of Badr",
+        "short_title_ar": "بدر",
+        "short_title_en": "Badr",
+        "category": "historical",
+        "main_persons": ["Muhammad", "Abu Jahl", "Believers"],
+        "groups": ["Muslims", "Quraysh", "Angels"],
+        "tags": ["battle", "victory", "angels", "divine_help", "faith"],
+        "places": [{"name": "Badr", "name_ar": "بدر", "basis": "explicit"}],
+        "era": "prophetic",
+        "era_basis": "explicit",
+        "time_description_en": "2 AH (624 CE), 17th of Ramadan",
+        "ayah_spans": [
+            {"sura": 8, "start": 5, "end": 19},
+            {"sura": 8, "start": 41, "end": 44},
+            {"sura": 3, "start": 123, "end": 127}
+        ],
+        "primary_sura": 8,
+        "summary_ar": "أول معركة فاصلة في الإسلام، انتصر فيها المسلمون على قريش بنصر من الله ودعم الملائكة",
+        "summary_en": "The first decisive battle in Islam where Muslims, with divine support and angels, defeated Quraysh.",
+        "lessons_ar": ["النصر من عند الله", "قلة العدد لا تمنع النصر", "التوكل على الله"],
+        "lessons_en": ["Victory is from Allah", "Small numbers don't prevent victory", "Reliance on Allah"],
+    },
+
+    # =========================================================================
+    # PROPHET IDRIS
+    # =========================================================================
+    {
+        "id": "cluster_idris",
+        "title_ar": "قصة إدريس عليه السلام",
+        "title_en": "Prophet Idris (Enoch)",
+        "short_title_ar": "إدريس",
+        "short_title_en": "Idris",
+        "category": "prophet",
+        "main_persons": ["Idris"],
+        "groups": [],
+        "tags": ["prophet", "truthfulness", "elevated", "patience"],
+        "places": [],
+        "era": "unknown",
+        "era_basis": "unknown",
+        "time_description_en": "Early prophet, possibly before Nuh (Noah)",
+        "ayah_spans": [
+            {"sura": 19, "start": 56, "end": 57},
+            {"sura": 21, "start": 85, "end": 85}
+        ],
+        "primary_sura": 19,
+        "summary_ar": "كان صديقاً نبياً ورفعه الله مكاناً علياً",
+        "summary_en": "A prophet of truth whom Allah raised to a high station.",
+        "lessons_ar": ["الصدق من صفات الأنبياء", "الله يرفع من يشاء"],
+        "lessons_en": ["Truthfulness is a quality of prophets", "Allah elevates whom He wills"],
+    },
+
+    # =========================================================================
+    # CONQUEST OF MECCA (AL-FATH)
+    # =========================================================================
+    {
+        "id": "cluster_fath_mecca",
+        "title_ar": "فتح مكة",
+        "title_en": "Conquest of Mecca",
+        "short_title_ar": "الفتح",
+        "short_title_en": "Conquest",
+        "category": "historical",
+        "main_persons": ["Muhammad"],
+        "groups": ["Muslims", "Quraysh"],
+        "tags": ["victory", "forgiveness", "idols", "kaaba", "peace"],
+        "places": [{"name": "Mecca", "name_ar": "مكة", "basis": "explicit"}],
+        "era": "prophetic",
+        "era_basis": "explicit",
+        "time_description_en": "8 AH (630 CE)",
+        "ayah_spans": [{"sura": 48, "start": 1, "end": 29}],
+        "primary_sura": 48,
+        "summary_ar": "دخل النبي ﷺ مكة فاتحاً منتصراً، وطهر الكعبة من الأصنام وعفا عن أهل مكة",
+        "summary_en": "The Prophet entered Mecca victorious, cleansed the Ka'bah of idols, and pardoned the people of Mecca.",
+        "lessons_ar": ["العفو عند المقدرة", "نصر الله للمؤمنين", "تطهير بيت الله"],
+        "lessons_en": ["Forgiveness when in power", "Allah's victory for believers", "Purifying Allah's House"],
+    },
+
+    # =========================================================================
+    # STORY OF IFK (ACCUSATION)
+    # =========================================================================
+    {
+        "id": "cluster_ifk",
+        "title_ar": "حادثة الإفك",
+        "title_en": "The Incident of Ifk (Slander)",
+        "short_title_ar": "الإفك",
+        "short_title_en": "The Slander",
+        "category": "historical",
+        "main_persons": ["Aisha"],
+        "groups": ["Hypocrites", "Believers"],
+        "tags": ["slander", "innocence", "patience", "revelation", "honor"],
+        "places": [],
+        "era": "prophetic",
+        "era_basis": "explicit",
+        "time_description_en": "5 or 6 AH, after a military expedition",
+        "ayah_spans": [{"sura": 24, "start": 11, "end": 26}],
+        "primary_sura": 24,
+        "summary_ar": "الافتراء الكاذب على أم المؤمنين عائشة رضي الله عنها وبراءتها من السماء",
+        "summary_en": "The false accusation against Aisha and her vindication through divine revelation.",
+        "lessons_ar": ["حفظ الأعراض", "عدم نشر الإشاعات", "براءة الصادقين"],
+        "lessons_en": ["Protecting honor", "Not spreading rumors", "Innocence of the truthful"],
+    },
+
+    # =========================================================================
+    # TREATY OF HUDAYBIYYAH
+    # =========================================================================
+    {
+        "id": "cluster_hudaybiyyah",
+        "title_ar": "صلح الحديبية",
+        "title_en": "Treaty of Hudaybiyyah",
+        "short_title_ar": "الحديبية",
+        "short_title_en": "Hudaybiyyah",
+        "category": "historical",
+        "main_persons": ["Muhammad"],
+        "groups": ["Muslims", "Quraysh"],
+        "tags": ["peace", "treaty", "wisdom", "patience", "victory"],
+        "places": [{"name": "Al-Hudaybiyyah", "name_ar": "الحديبية", "basis": "explicit"}],
+        "era": "prophetic",
+        "era_basis": "explicit",
+        "time_description_en": "6 AH (628 CE)",
+        "ayah_spans": [{"sura": 48, "start": 1, "end": 29}],
+        "primary_sura": 48,
+        "summary_ar": "معاهدة الصلح بين المسلمين وقريش، التي سماها الله فتحاً مبيناً",
+        "summary_en": "The peace treaty between Muslims and Quraysh, which Allah called a clear victory.",
+        "lessons_ar": ["الصلح خير", "النصر قد يأتي بالحكمة", "الصبر على أمر الله"],
+        "lessons_en": ["Peace is better", "Victory may come through wisdom", "Patience with Allah's decree"],
+    },
 ]
 
 # =============================================================================

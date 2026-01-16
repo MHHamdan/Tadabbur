@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Book, Network, List, Users, Tag, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Book, Network, List, Users, Tag, ChevronDown, ChevronUp, ExternalLink, BarChart3, Lightbulb } from 'lucide-react';
 import { useLanguageStore } from '../stores/languageStore';
 import { t, translateCategory, translateTheme, translateFigure, translateAspect } from '../i18n/translations';
 import { storiesApi, quranApi, StoryDetail, StoryGraph, Verse, StorySegment } from '../lib/api';
 import { StoryGraphView } from '../components/stories/StoryGraphView';
+import { ThematicFlow } from '../components/stories/ThematicFlow';
+import { NarrativeInsights } from '../components/stories/NarrativeInsights';
+import { RelatedStories } from '../components/stories/RelatedStories';
 import clsx from 'clsx';
 
-type ViewMode = 'list' | 'graph';
+type ViewMode = 'list' | 'graph' | 'themes' | 'insights';
 
 // Cache for fetched verses
 interface SegmentVerses {
@@ -92,9 +95,11 @@ export function StoryDetailPage() {
   if (!story) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8 text-center">
-        <p className="text-gray-500">Story not found</p>
+        <p className="text-gray-500">
+          {language === 'ar' ? 'القصة غير موجودة' : 'Story not found'}
+        </p>
         <Link to="/stories" className="text-primary-600 hover:underline mt-4 inline-block">
-          Back to Stories
+          {language === 'ar' ? 'العودة للقصص' : 'Back to Stories'}
         </Link>
       </div>
     );
@@ -188,6 +193,30 @@ export function StoryDetailPage() {
           >
             <Network className="w-4 h-4" />
             {t('view_graph', language)}
+          </button>
+          <button
+            onClick={() => setViewMode('themes')}
+            className={clsx(
+              'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
+              viewMode === 'themes'
+                ? 'bg-white shadow text-primary-600'
+                : 'text-gray-600 hover:text-gray-900'
+            )}
+          >
+            <BarChart3 className="w-4 h-4" />
+            {language === 'ar' ? 'المواضيع' : 'Themes'}
+          </button>
+          <button
+            onClick={() => setViewMode('insights')}
+            className={clsx(
+              'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
+              viewMode === 'insights'
+                ? 'bg-white shadow text-primary-600'
+                : 'text-gray-600 hover:text-gray-900'
+            )}
+          >
+            <Lightbulb className="w-4 h-4" />
+            {language === 'ar' ? 'تحليل' : 'Insights'}
           </button>
         </div>
       </div>
@@ -300,11 +329,32 @@ export function StoryDetailPage() {
               );
             })}
         </div>
-      ) : (
-        <div className="card p-0 overflow-hidden" style={{ height: '600px' }}>
+      ) : viewMode === 'graph' ? (
+        <div className="card p-0 overflow-hidden" style={{ height: '700px' }}>
           {graphData && <StoryGraphView graph={graphData} language={language} />}
         </div>
+      ) : viewMode === 'themes' ? (
+        <ThematicFlow
+          segments={story.segments}
+          language={language}
+          themes={story.themes || []}
+        />
+      ) : (
+        <NarrativeInsights
+          segments={story.segments}
+          language={language}
+          storyName={name}
+        />
       )}
+
+      {/* Related Stories Section */}
+      <div className="mt-8">
+        <RelatedStories
+          storyId={storyId!}
+          storyName={name}
+          language={language}
+        />
+      </div>
     </div>
   );
 }

@@ -17,6 +17,7 @@ from sqlalchemy.orm import selectinload
 from app.db.database import get_async_session
 from app.models.story import Story, StorySegment, StoryConnection, CrossStoryConnection, Theme
 from app.services.story_graph import StoryGraphService
+from app.services.similarity import SimilarityService
 
 router = APIRouter()
 
@@ -156,6 +157,17 @@ class CrossStoryConnectionResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class SimilarStoryResponse(BaseModel):
+    """Similar story based on concept overlap."""
+    id: str
+    title_ar: str
+    title_en: str
+    similarity_score: float
+    shared_concepts: List[str] = []
+    shared_themes: List[str] = []
+    shared_figures: List[str] = []
 
 
 # Routes
@@ -391,6 +403,40 @@ async def get_cross_story_connections(
     connections = result.scalars().all()
 
     return [CrossStoryConnectionResponse.model_validate(c) for c in connections]
+
+
+@router.get("/{story_id}/similar", response_model=List[SimilarStoryResponse])
+async def get_similar_stories(
+    story_id: str,
+    limit: int = Query(10, ge=1, le=50, description="Max similar stories to return"),
+    min_score: float = Query(0.1, ge=0, le=1, description="Minimum similarity score"),
+    session: AsyncSession = Depends(get_async_session),
+):
+    """
+    Get stories similar to the given story based on shared concepts.
+
+    Uses Jaccard similarity on concept overlap.
+    Returns stories ranked by similarity score.
+    """
+    similarity_service = SimilarityService(session)
+    similar = await similarity_service.get_similar_stories(
+        story_id=story_id,
+        limit=limit,
+        min_score=min_score,
+    )
+
+    return [
+        SimilarStoryResponse(
+            id=s.id,
+            title_ar=s.title_ar,
+            title_en=s.title_en,
+            similarity_score=s.similarity_score,
+            shared_concepts=s.shared_concepts,
+            shared_themes=s.shared_themes,
+            shared_figures=s.shared_figures,
+        )
+        for s in similar
+    ]
 
 
 @router.get("/by-figure/{figure}")

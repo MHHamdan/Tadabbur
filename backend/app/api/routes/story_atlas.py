@@ -17,6 +17,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.database import get_async_session
 from app.services.story_atlas import StoryAtlasService, get_role_style
+from app.services.similarity import SimilarityService
 
 router = APIRouter()
 
@@ -444,3 +445,48 @@ async def get_related_clusters(
     related = await service.get_related_clusters(cluster_id)
 
     return [RelatedClusterResponse(**r) for r in related]
+
+
+class SimilarClusterResponse(BaseModel):
+    """Similar cluster based on concept overlap."""
+    id: str
+    title_ar: str
+    title_en: str
+    similarity_score: float
+    shared_concepts: List[str] = []
+    shared_themes: List[str] = []
+    shared_figures: List[str] = []
+
+
+@router.get("/{cluster_id}/similar", response_model=List[SimilarClusterResponse])
+async def get_similar_clusters(
+    cluster_id: str,
+    limit: int = Query(10, ge=1, le=50, description="Max similar clusters to return"),
+    min_score: float = Query(0.1, ge=0, le=1, description="Minimum similarity score"),
+    session: AsyncSession = Depends(get_async_session),
+):
+    """
+    Get clusters similar to the given cluster based on shared concepts.
+
+    Uses Jaccard similarity on concept overlap.
+    Different from /related which uses explicit connections.
+    """
+    similarity_service = SimilarityService(session)
+    similar = await similarity_service.get_similar_clusters(
+        cluster_id=cluster_id,
+        limit=limit,
+        min_score=min_score,
+    )
+
+    return [
+        SimilarClusterResponse(
+            id=s.id,
+            title_ar=s.title_ar,
+            title_en=s.title_en,
+            similarity_score=s.similarity_score,
+            shared_concepts=s.shared_concepts,
+            shared_themes=s.shared_themes,
+            shared_figures=s.shared_figures,
+        )
+        for s in similar
+    ]

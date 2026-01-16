@@ -21,7 +21,7 @@ The RAG pipeline supports two categories of languages:
 IMPORTANT: Never use display-only languages for RAG retrieval or reasoning.
 """
 from enum import Enum
-from typing import List, Optional
+from typing import List, Optional, Dict
 from dataclasses import dataclass, field
 
 
@@ -77,6 +77,62 @@ class Citation:
 
 
 @dataclass
+class RelatedVerse:
+    """A Quranic verse related to the query - displayed prominently before tafsir."""
+    sura_no: int
+    aya_no: int
+    verse_reference: str  # e.g., "2:255"
+    text_ar: str  # Arabic text of the verse
+    text_en: str  # English translation
+    sura_name_ar: Optional[str] = None  # e.g., "البقرة"
+    sura_name_en: Optional[str] = None  # e.g., "Al-Baqarah"
+    topic: Optional[str] = None  # Semantic topic from concept occurrences
+    relevance_score: float = 0.0
+
+    def to_dict(self) -> dict:
+        return {
+            "sura_no": self.sura_no,
+            "aya_no": self.aya_no,
+            "verse_reference": self.verse_reference,
+            "text_ar": self.text_ar,
+            "text_en": self.text_en,
+            "sura_name_ar": self.sura_name_ar,
+            "sura_name_en": self.sura_name_en,
+            "topic": self.topic,
+            "relevance_score": self.relevance_score,
+        }
+
+
+@dataclass
+class TafsirExplanation:
+    """A tafsir explanation from a specific source."""
+    source_id: str
+    source_name: str  # English name
+    source_name_ar: str  # Arabic name
+    author_name: Optional[str] = None  # Author name
+    author_name_ar: Optional[str] = None  # Arabic author name
+    methodology: Optional[str] = None  # bil_mathur, bil_ray, linguistic, etc.
+    explanation: str = ""  # The tafsir text
+    verse_reference: str = ""  # Which verse this explains
+    era: str = "classical"  # "classical" or "modern"
+    reliability_score: float = 0.8
+
+    def to_dict(self) -> dict:
+        return {
+            "source_id": self.source_id,
+            "source_name": self.source_name,
+            "source_name_ar": self.source_name_ar,
+            "author_name": self.author_name,
+            "author_name_ar": self.author_name_ar,
+            "methodology": self.methodology,
+            "explanation": self.explanation,
+            "verse_reference": self.verse_reference,
+            "era": self.era,
+            "reliability_score": self.reliability_score,
+        }
+
+
+@dataclass
 class GroundedResponse:
     """Response from RAG pipeline with mandatory citations."""
     answer: str
@@ -99,6 +155,19 @@ class GroundedResponse:
 
     # Raw evidence chunks for transparency panel
     evidence: List['RetrievedChunk'] = field(default_factory=list)
+
+    # === NEW: Enhanced response fields for chat experience ===
+    # Session ID for conversation continuity
+    session_id: Optional[str] = None
+
+    # Related Quranic verses - displayed prominently before tafsir
+    related_verses: List['RelatedVerse'] = field(default_factory=list)
+
+    # Tafsir explanations grouped by source for accordion display
+    tafsir_by_source: Dict[str, List['TafsirExplanation']] = field(default_factory=dict)
+
+    # AI-generated follow-up question suggestions
+    follow_up_suggestions: List[str] = field(default_factory=list)
 
     # API version for client compatibility checking
     api_version: str = "1.0.0"
@@ -153,6 +222,18 @@ class GroundedResponse:
                 }
                 for e in self.evidence
             ],
+            # === NEW: Chat experience fields ===
+            # Session ID for conversation continuity
+            "session_id": self.session_id,
+            # Related Quranic verses - displayed first
+            "related_verses": [v.to_dict() for v in self.related_verses],
+            # Tafsir explanations grouped by source
+            "tafsir_by_source": {
+                source_id: [t.to_dict() for t in explanations]
+                for source_id, explanations in self.tafsir_by_source.items()
+            },
+            # Follow-up question suggestions
+            "follow_up_suggestions": self.follow_up_suggestions,
             # API version for contract compatibility
             "api_version": self.api_version,
         }

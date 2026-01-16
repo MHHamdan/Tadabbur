@@ -37,6 +37,26 @@ export const translations: Translations = {
     ar: 'الأطلس',
     en: 'Atlas',
   },
+  nav_concepts: {
+    ar: 'المفاهيم',
+    en: 'Concepts',
+  },
+  nav_themes: {
+    ar: 'المحاور',
+    en: 'Themes',
+  },
+  nav_miracles: {
+    ar: 'الآيات',
+    en: 'Miracles',
+  },
+  nav_similarity: {
+    ar: 'صلة الآيات',
+    en: 'Verse Links',
+  },
+  nav_mushaf: {
+    ar: 'المصحف',
+    en: 'Mushaf',
+  },
 
   // Common
   app_title: {
@@ -62,6 +82,104 @@ export const translations: Translations = {
   close: {
     ar: 'إغلاق',
     en: 'Close',
+  },
+
+  // Search page
+  nav_search: {
+    ar: 'البحث',
+    en: 'Search',
+  },
+  search_title: {
+    ar: 'البحث في القرآن الكريم',
+    en: 'Search the Holy Quran',
+  },
+  search_subtitle: {
+    ar: 'ابحث عن الكلمات والعبارات مع التحليل الدلالي والنحوي',
+    en: 'Search for words and phrases with semantic and grammatical analysis',
+  },
+  search_placeholder: {
+    ar: 'اكتب كلمة أو عبارة للبحث...',
+    en: 'Type a word or phrase to search...',
+  },
+  search_button: {
+    ar: 'ابحث',
+    en: 'Search',
+  },
+  search_results: {
+    ar: 'نتائج البحث',
+    en: 'Search Results',
+  },
+  search_total_matches: {
+    ar: 'إجمالي النتائج',
+    en: 'Total Matches',
+  },
+  search_no_results: {
+    ar: 'لم يتم العثور على نتائج',
+    en: 'No results found',
+  },
+  search_try_different: {
+    ar: 'جرب كلمة مختلفة أو تحقق من الإملاء',
+    en: 'Try a different word or check the spelling',
+  },
+  search_analytics: {
+    ar: 'تحليلات الكلمة',
+    en: 'Word Analytics',
+  },
+  search_distribution: {
+    ar: 'التوزيع',
+    en: 'Distribution',
+  },
+  search_by_sura: {
+    ar: 'حسب السورة',
+    en: 'By Sura',
+  },
+  search_by_juz: {
+    ar: 'حسب الجزء',
+    en: 'By Juz',
+  },
+  search_semantic: {
+    ar: 'البحث الدلالي',
+    en: 'Semantic Search',
+  },
+  search_semantic_desc: {
+    ar: 'تضمين المصطلحات ذات الصلة في البحث',
+    en: 'Include related terms in search',
+  },
+  search_related_terms: {
+    ar: 'المصطلحات المرتبطة',
+    en: 'Related Terms',
+  },
+  search_exact_match: {
+    ar: 'تطابق تام',
+    en: 'Exact Match',
+  },
+  search_partial_match: {
+    ar: 'تطابق جزئي',
+    en: 'Partial Match',
+  },
+  search_relevance: {
+    ar: 'الصلة',
+    en: 'Relevance',
+  },
+  search_occurrences: {
+    ar: 'مرة',
+    en: 'occurrences',
+  },
+  search_sample_words: {
+    ar: 'كلمات مقترحة',
+    en: 'Sample Words',
+  },
+  search_load_more: {
+    ar: 'تحميل المزيد',
+    en: 'Load More',
+  },
+  search_filter_sura: {
+    ar: 'تصفية حسب السورة',
+    en: 'Filter by Sura',
+  },
+  search_all_suras: {
+    ar: 'جميع السور',
+    en: 'All Suras',
   },
 
   // Stories
@@ -205,6 +323,52 @@ export const translations: Translations = {
     ar: 'حدث خطأ أثناء معالجة السؤال',
     en: 'An error occurred while processing the question',
   },
+
+  // Similarity page
+  similarity_title: {
+    ar: 'صلة الآيات',
+    en: 'Verse Connections',
+  },
+  similarity_subtitle: {
+    ar: 'اكتشف الآيات المتشابهة حسب الموضوع والمعنى والجذور اللغوية',
+    en: 'Discover similar verses by theme, meaning, and linguistic roots',
+  },
+  similarity_search_placeholder: {
+    ar: 'أدخل رقم السورة:الآية (مثل 2:255) أو نص الآية...',
+    en: 'Enter sura:verse (e.g., 2:255) or verse text...',
+  },
+  similarity_search_button: {
+    ar: 'ابحث عن المتشابهات',
+    en: 'Find Similar',
+  },
+  similarity_no_results: {
+    ar: 'لم يتم العثور على آيات متشابهة',
+    en: 'No similar verses found',
+  },
+  similarity_results_count: {
+    ar: 'آية متشابهة',
+    en: 'similar verses',
+  },
+  similarity_connection_type: {
+    ar: 'نوع الصلة',
+    en: 'Connection Type',
+  },
+  similarity_filter_theme: {
+    ar: 'تصفية حسب الموضوع',
+    en: 'Filter by Theme',
+  },
+  similarity_min_score: {
+    ar: 'الحد الأدنى للتشابه',
+    en: 'Minimum Similarity',
+  },
+  similarity_exclude_same_sura: {
+    ar: 'استثناء نفس السورة',
+    en: 'Exclude Same Sura',
+  },
+  similarity_popular_verses: {
+    ar: 'آيات شائعة للبحث',
+    en: 'Popular Verses to Explore',
+  },
 };
 
 // Story categories translation map
@@ -294,6 +458,16 @@ export const themeTranslations: Record<string, { ar: string; en: string }> = {
   transformation: { ar: 'التحول', en: 'transformation' },
   trickery: { ar: 'المكر', en: 'trickery' },
 
+  // Missing themes from manifest (Phase 10 fix)
+  belief: { ar: 'الاعتقاد', en: 'Belief' },
+  trade: { ar: 'التجارة', en: 'Trade' },
+  unseen: { ar: 'الغيب', en: 'The Unseen' },
+  end_times: { ar: 'آخر الزمان', en: 'End Times' },
+  idolatry: { ar: 'عبادة الأصنام', en: 'Idolatry' },
+  weakness: { ar: 'الضعف', en: 'Weakness' },
+  logic: { ar: 'المنطق', en: 'Logic' },
+  rejection: { ar: 'الرفض', en: 'Rejection' },
+
   // ============================================================
   // COMPREHENSIVE SEMANTIC TAGS FROM STORY DATA (dhul_qarnayn_enhanced.json etc.)
   // ============================================================
@@ -319,7 +493,9 @@ export const themeTranslations: Record<string, { ar: string; en: string }> = {
 
   // Test and moral decision tags
   test: { ar: 'الاختبار', en: 'test' },
+  test_of_prophet: { ar: 'اختبار النبي', en: 'test_of_prophet' },
   moral_decision: { ar: 'قرار أخلاقي', en: 'moral_decision' },
+  moral_choice: { ar: 'الاختيار الأخلاقي', en: 'moral_choice' },
   restraint: { ar: 'ضبط النفس', en: 'restraint' },
   self_control: { ar: 'التحكم بالنفس', en: 'self_control' },
 
@@ -343,6 +519,7 @@ export const themeTranslations: Record<string, { ar: string; en: string }> = {
   // Encounter and conflict tags
   encounter: { ar: 'اللقاء', en: 'encounter' },
   oppressed: { ar: 'المستضعفين', en: 'oppressed' },
+  vulnerable_people: { ar: 'المستضعفون', en: 'vulnerable_people' },
   yajuj_majuj: { ar: 'يأجوج ومأجوج', en: 'yajuj_majuj' },
   corruption: { ar: 'الفساد', en: 'corruption' },
   plea_for_help: { ar: 'طلب النجدة', en: 'plea_for_help' },
@@ -412,6 +589,156 @@ export const themeTranslations: Record<string, { ar: string; en: string }> = {
   hidayah: { ar: 'الهداية', en: 'hidayah' },
   inzar: { ar: 'الإنذار', en: 'inzar' },
   bashirah: { ar: 'البشارة', en: 'bashirah' },
+  prophetic: { ar: 'نبوي', en: 'Prophetic' },
+
+  // Angels and divine beings
+  angels: { ar: 'الملائكة', en: 'angels' },
+  angel: { ar: 'ملك', en: 'angel' },
+  jibril: { ar: 'جبريل', en: 'Jibril' },
+
+  // Idolatry and related
+  idols: { ar: 'الأصنام', en: 'idols' },
+  idol_worship: { ar: 'عبادة الأصنام', en: 'idol_worship' },
+  breaking_idols: { ar: 'تحطيم الأصنام', en: 'breaking_idols' },
+  forbidden_tree: { ar: 'الشجرة المحرمة', en: 'forbidden_tree' },
+  khalifah: { ar: 'الخليفة', en: 'khalifah' },
+  prostration: { ar: 'السجود', en: 'prostration' },
+
+  // Divine help and intervention
+  divine_help: { ar: 'النصر الإلهي', en: 'divine_help' },
+  divine_victory: { ar: 'الفتح الإلهي', en: 'divine_victory' },
+
+  // Peace and related
+  peace: { ar: 'السلام', en: 'peace' },
+  forgive: { ar: 'العفو', en: 'forgive' },
+
+  // Story-specific tags
+  sleep: { ar: 'النوم', en: 'sleep' },
+  persecution: { ar: 'الاضطهاد', en: 'persecution' },
+  lesson: { ar: 'العبرة', en: 'lesson' },
+  hidden_wisdom: { ar: 'الحكمة الخفية', en: 'hidden_wisdom' },
+  learning: { ar: 'التعلم', en: 'learning' },
+  barrier: { ar: 'السد', en: 'barrier' },
+  family_test: { ar: 'اختبار الأسرة', en: 'family_test' },
+  arguing_with_idolaters: { ar: 'محاجة المشركين', en: 'arguing_with_idolaters' },
+  miracle_birth: { ar: 'الولادة المعجزة', en: 'miracle_birth' },
+  table: { ar: 'المائدة', en: 'table' },
+  iram: { ar: 'إرم', en: 'iram' },
+  rock_dwellings: { ar: 'البيوت الصخرية', en: 'rock_dwellings' },
+  rain_of_stones: { ar: 'مطر الحجارة', en: 'rain_of_stones' },
+  sheba: { ar: 'سبأ', en: 'sheba' },
+  sea_parting: { ar: 'شق البحر', en: 'sea_parting' },
+  exodus: { ar: 'الخروج', en: 'exodus' },
+  tyrant: { ar: 'الطاغية', en: 'tyrant' },
+  birds: { ar: 'الطيور', en: 'birds' },
+  ants: { ar: 'النمل', en: 'ants' },
+  miracle_child: { ar: 'الطفل المعجزة', en: 'miracle_child' },
+  old_age: { ar: 'الشيخوخة', en: 'old_age' },
+  fahisha: { ar: 'الفاحشة', en: 'fahisha' },
+  homosexuality: { ar: 'اللواط', en: 'homosexuality' },
+  she_camel: { ar: 'الناقة', en: 'she_camel' },
+  whale: { ar: 'الحوت', en: 'whale' },
+  darkness: { ar: 'الظلمات', en: 'darkness' },
+  illness: { ar: 'المرض', en: 'illness' },
+  fraud: { ar: 'الغش', en: 'fraud' },
+  weights_measures: { ar: 'الكيل والميزان', en: 'weights_measures' },
+  business: { ar: 'التجارة', en: 'business' },
+  crow: { ar: 'الغراب', en: 'crow' },
+  regret: { ar: 'الندم', en: 'regret' },
+  hundred_years: { ar: 'مئة عام', en: 'hundred_years' },
+  donkey: { ar: 'الحمار', en: 'donkey' },
+  kingship: { ar: 'الملوكية', en: 'kingship' },
+  river_test: { ar: 'اختبار النهر', en: 'river_test' },
+  goliath: { ar: 'جالوت', en: 'goliath' },
+  zabur: { ar: 'الزبور', en: 'zabur' },
+  psalms: { ar: 'المزامير', en: 'psalms' },
+  fishing: { ar: 'الصيد', en: 'fishing' },
+  apes: { ar: 'القردة', en: 'apes' },
+  throne: { ar: 'العرش', en: 'throne' },
+  speed: { ar: 'السرعة', en: 'speed' },
+  elevated: { ar: 'الرفعة', en: 'elevated' },
+
+  // Battle of Badr tags
+  departure: { ar: 'الخروج', en: 'departure' },
+  reluctance: { ar: 'التردد', en: 'reluctance' },
+  divine_plan: { ar: 'التدبير الإلهي', en: 'divine_plan' },
+  choice: { ar: 'الاختيار', en: 'choice' },
+  reinforcement: { ar: 'الإمداد', en: 'reinforcement' },
+  tranquility: { ar: 'السكينة', en: 'tranquility' },
+  divine_action: { ar: 'الفعل الإلهي', en: 'divine_action' },
+  tyrant_death: { ar: 'مقتل الطاغية', en: 'tyrant_death' },
+  furqan: { ar: 'الفرقان', en: 'furqan' },
+
+  // Isra and Miraj tags
+  glorification: { ar: 'التسبيح', en: 'glorification' },
+  aqsa: { ar: 'الأقصى', en: 'aqsa' },
+  holiness: { ar: 'القدسية', en: 'holiness' },
+  divine_wisdom: { ar: 'الحكمة الإلهية', en: 'divine_wisdom' },
+  hearing: { ar: 'السمع', en: 'hearing' },
+  seeing: { ar: 'البصر', en: 'seeing' },
+
+  // Conquest of Mecca tags
+  conquest: { ar: 'الفتح', en: 'conquest' },
+  divine_gift: { ar: 'العطاء الإلهي', en: 'divine_gift' },
+  increase: { ar: 'الزيادة', en: 'increase' },
+  fulfillment: { ar: 'التحقق', en: 'fulfillment' },
+  safety: { ar: 'الأمان', en: 'safety' },
+  islam: { ar: 'الإسلام', en: 'islam' },
+  truth: { ar: 'الحق', en: 'truth' },
+
+  // Ifk (Slander) tags
+  slander: { ar: 'الإفك', en: 'slander' },
+  falsehood: { ar: 'الباطل', en: 'falsehood' },
+  good_opinion: { ar: 'حسن الظن', en: 'good_opinion' },
+  innocence: { ar: 'البراءة', en: 'innocence' },
+  vindication: { ar: 'التبرئة', en: 'vindication' },
+
+  // Hudaybiyyah tags
+  treaty: { ar: 'المعاهدة', en: 'treaty' },
+  pledge: { ar: 'البيعة', en: 'pledge' },
+  ridwan: { ar: 'الرضوان', en: 'ridwan' },
+  tree: { ar: 'الشجرة', en: 'tree' },
+  satisfaction: { ar: 'الرضا', en: 'satisfaction' },
+  hearts: { ar: 'القلوب', en: 'hearts' },
+  spoils: { ar: 'الغنائم', en: 'spoils' },
+
+  // Idris tags
+  mention: { ar: 'الذكر', en: 'mention' },
+  station: { ar: 'المكانة', en: 'station' },
+
+  // Additional story tags
+  caravan: { ar: 'القافلة', en: 'caravan' },
+  slavery: { ar: 'العبودية', en: 'slavery' },
+  resistance: { ar: 'المقاومة', en: 'resistance' },
+  abandonment: { ar: 'التخلي', en: 'abandonment' },
+  cup: { ar: 'الصواع', en: 'cup' },
+  brother: { ar: 'الأخ', en: 'brother' },
+  dream_fulfilled: { ar: 'تحقق الرؤيا', en: 'dream_fulfilled' },
+  youth: { ar: 'الشباب', en: 'youth' },
+  escape: { ar: 'الهروب', en: 'escape' },
+  wonder: { ar: 'العجب', en: 'wonder' },
+  discovery: { ar: 'الاكتشاف', en: 'discovery' },
+  mashallah: { ar: 'ما شاء الله', en: 'mashallah' },
+  denial: { ar: 'الإنكار', en: 'denial' },
+  fate: { ar: 'القدر', en: 'fate' },
+  orphans: { ar: 'اليتامى', en: 'orphans' },
+  wisdom_revealed: { ar: 'الحكمة المكشوفة', en: 'wisdom_revealed' },
+  special_knowledge: { ar: 'العلم اللدني', en: 'special_knowledge' },
+  knowledge_seeking: { ar: 'طلب العلم', en: 'knowledge_seeking' },
+  ship: { ar: 'السفينة', en: 'ship' },
+  means: { ar: 'الأسباب', en: 'means' },
+  new_beginning: { ar: 'البداية الجديدة', en: 'new_beginning' },
+  judi: { ar: 'الجودي', en: 'judi' },
+  methods: { ar: 'الأساليب', en: 'methods' },
+  persistence: { ar: 'الإصرار', en: 'persistence' },
+  finality: { ar: 'النهائية', en: 'finality' },
+  preparation: { ar: 'الاستعداد', en: 'preparation' },
+  reasoning: { ar: 'الاستدلال', en: 'reasoning' },
+  stars: { ar: 'النجوم', en: 'stars' },
+  challenge: { ar: 'التحدي', en: 'challenge' },
+  proof: { ar: 'الحجة', en: 'proof' },
+  blessed_land: { ar: 'الأرض المباركة', en: 'blessed_land' },
+  covenant: { ar: 'الميثاق', en: 'covenant' },
 
   // Community and society tags
   ummah: { ar: 'الأمة', en: 'ummah' },
@@ -437,6 +764,85 @@ export const themeTranslations: Record<string, { ar: string; en: string }> = {
   climax: { ar: 'الذروة', en: 'climax' },
   resolution: { ar: 'الحل', en: 'resolution' },
   conclusion: { ar: 'الخاتمة', en: 'conclusion' },
+
+  // ============================================================
+  // NEW STORY TAGS - Prophet Ilyas, Al-Yasa, Dhul-Kifl, Ahzab, Ya-Sin Town, etc.
+  // ============================================================
+
+  // Prophet Ilyas tags
+  baal: { ar: 'بعل', en: 'Baal' },
+  baal_worship: { ar: 'عبادة بعل', en: 'baal_worship' },
+  mission: { ar: 'الرسالة', en: 'mission' },
+  sending: { ar: 'الإرسال', en: 'sending' },
+  legacy: { ar: 'الإرث', en: 'legacy' },
+  bani_israil: { ar: 'بني إسرائيل', en: 'bani_israil' },
+
+  // Prophet Al-Yasa and Dhul-Kifl tags
+  chosen: { ar: 'المصطفى', en: 'chosen' },
+  outstanding: { ar: 'الأخيار', en: 'outstanding' },
+
+  // Battle of Ahzab/Khandaq tags
+  siege: { ar: 'الحصار', en: 'siege' },
+  confederates: { ar: 'الأحزاب', en: 'confederates' },
+  armies: { ar: 'الجيوش', en: 'armies' },
+  trench: { ar: 'الخندق', en: 'trench' },
+  fear: { ar: 'الخوف', en: 'fear' },
+  shaking: { ar: 'الزلزلة', en: 'shaking' },
+  steadfastness: { ar: 'الثبات', en: 'steadfastness' },
+  enemy_retreat: { ar: 'انسحاب العدو', en: 'enemy_retreat' },
+  judgment: { ar: 'الحكم', en: 'judgment' },
+
+  // People of the Town (Ya-Sin) tags
+  town: { ar: 'القرية', en: 'town' },
+  messengers: { ar: 'الرسل', en: 'messengers' },
+  escalation: { ar: 'التصعيد', en: 'escalation' },
+  believer: { ar: 'المؤمن', en: 'believer' },
+  heroism: { ar: 'البطولة', en: 'heroism' },
+  wish: { ar: 'الأمنية', en: 'wish' },
+  blast: { ar: 'الصيحة', en: 'blast' },
+  stoning: { ar: 'الرجم', en: 'stoning' },
+  threat: { ar: 'التهديد', en: 'threat' },
+  extinguished: { ar: 'الخمود', en: 'extinguished' },
+
+  // People of the Rass and Tubba tags
+  nations: { ar: 'الأمم', en: 'nations' },
+  destroyed_nations: { ar: 'الأمم الهالكة', en: 'destroyed_nations' },
+  examples: { ar: 'الأمثال', en: 'examples' },
+  unknown_identity: { ar: 'هوية مجهولة', en: 'unknown_identity' },
+  yemen: { ar: 'اليمن', en: 'yemen' },
+  kings: { ar: 'الملوك', en: 'kings' },
+  criminals: { ar: 'المجرمون', en: 'criminals' },
+  comparison: { ar: 'المقارنة', en: 'comparison' },
+  deniers: { ar: 'المكذبون', en: 'deniers' },
+
+  // 'Abasa (Blind Man) story tags
+  correction: { ar: 'العتاب', en: 'correction' },
+  blind_man: { ar: 'الأعمى', en: 'blind_man' },
+  purification: { ar: 'التزكية', en: 'purification' },
+  benefit: { ar: 'النفع', en: 'benefit' },
+  priorities: { ar: 'الأولويات', en: 'priorities' },
+  self_sufficient: { ar: 'المستغني', en: 'self_sufficient' },
+  responsibility: { ar: 'المسؤولية', en: 'responsibility' },
+  seeker: { ar: 'الساعي', en: 'seeker' },
+  fear_of_allah: { ar: 'الخشية', en: 'fear_of_allah' },
+  distracted: { ar: 'التلهي', en: 'distracted' },
+
+  // Bani Nadir expulsion tags
+  expulsion: { ar: 'الإجلاء', en: 'expulsion' },
+  jews: { ar: 'اليهود', en: 'jews' },
+  first_gathering: { ar: 'أول الحشر', en: 'first_gathering' },
+  fortresses: { ar: 'الحصون', en: 'fortresses' },
+  surprise: { ar: 'المفاجأة', en: 'surprise' },
+  divine_decree: { ar: 'القضاء الإلهي', en: 'divine_decree' },
+  terror: { ar: 'الرعب', en: 'terror' },
+  lies: { ar: 'الكذب', en: 'lies' },
+
+  // People of Aiyka tags
+  aiyka: { ar: 'الأيكة', en: 'aiyka' },
+  forest: { ar: 'الغابة', en: 'forest' },
+  shadow: { ar: 'الظلة', en: 'shadow' },
+  shadow_day: { ar: 'يوم الظلة', en: 'shadow_day' },
+  accusation: { ar: 'الاتهام', en: 'accusation' },
 };
 
 // Main figures translations
@@ -462,6 +868,10 @@ export const figureTranslations: Record<string, { ar: string; en: string }> = {
   "Shu'ayb": { ar: 'شعيب', en: "Shu'ayb" },
   Ayyub: { ar: 'أيوب', en: 'Ayyub' },
   Yunus: { ar: 'يونس', en: 'Yunus' },
+  Idris: { ar: 'إدريس', en: 'Idris' },
+  // Prophet Muhammad ﷺ
+  Muhammad: { ar: 'محمد ﷺ', en: 'Muhammad ﷺ' },
+  'Prophet Muhammad': { ar: 'النبي محمد ﷺ', en: 'Prophet Muhammad ﷺ' },
   // Righteous people
   Luqman: { ar: 'لقمان', en: 'Luqman' },
   'Dhul-Qarnayn': { ar: 'ذو القرنين', en: 'Dhul-Qarnayn' },
@@ -511,6 +921,105 @@ export const figureTranslations: Record<string, { ar: string; en: string }> = {
   'The murdered man': { ar: 'القتيل', en: 'The murdered man' },
   Aziz: { ar: 'العزيز', en: 'Aziz' },
   'Yajuj and Majuj': { ar: 'يأجوج ومأجوج', en: 'Yajuj and Majuj' },
+  // Prophetic era figures
+  'Abu Jahl': { ar: 'أبو جهل', en: 'Abu Jahl' },
+  'Abu Lahab': { ar: 'أبو لهب', en: 'Abu Lahab' },
+  'Abu Sufyan': { ar: 'أبو سفيان', en: 'Abu Sufyan' },
+  'Abu Bakr': { ar: 'أبو بكر', en: 'Abu Bakr' },
+  'Umar': { ar: 'عمر', en: 'Umar' },
+  'Uthman': { ar: 'عثمان', en: 'Uthman' },
+  'Ali': { ar: 'علي', en: 'Ali' },
+  'Khadijah': { ar: 'خديجة', en: 'Khadijah' },
+  'Aisha': { ar: 'عائشة', en: 'Aisha' },
+  'Fatimah': { ar: 'فاطمة', en: 'Fatimah' },
+  'Hamza': { ar: 'حمزة', en: 'Hamza' },
+  'Bilal': { ar: 'بلال', en: 'Bilal' },
+  // Groups
+  Believers: { ar: 'المؤمنون', en: 'Believers' },
+  Companions: { ar: 'الصحابة', en: 'Companions' },
+  Muslims: { ar: 'المسلمون', en: 'Muslims' },
+  Quraysh: { ar: 'قريش', en: 'Quraysh' },
+  Hypocrites: { ar: 'المنافقون', en: 'Hypocrites' },
+  Angels: { ar: 'الملائكة', en: 'Angels' },
+  Prophets: { ar: 'الأنبياء', en: 'Prophets' },
+  'Young Believers': { ar: 'الفتية المؤمنون', en: 'Young Believers' },
+  'Rich Man': { ar: 'الرجل الغني', en: 'Rich Man' },
+  'Poor Believer': { ar: 'المؤمن الفقير', en: 'Poor Believer' },
+  'Al-Khidr': { ar: 'الخضر', en: 'Al-Khidr' },
+  'Aziz of Egypt': { ar: 'عزيز مصر', en: 'Aziz of Egypt' },
+  'Wife of Aziz': { ar: 'امرأة العزيز', en: 'Wife of Aziz' },
+  King: { ar: 'الملك', en: 'King' },
+  'Son of Nuh': { ar: 'ابن نوح', en: 'Son of Nuh' },
+  'Wife of Nuh': { ar: 'امرأة نوح', en: 'Wife of Nuh' },
+  'People of Nuh': { ar: 'قوم نوح', en: 'People of Nuh' },
+  Egyptians: { ar: 'المصريون', en: 'Egyptians' },
+  'Firawn (Pharaoh)': { ar: 'فرعون', en: 'Firawn (Pharaoh)' },
+  'Hawariyyun': { ar: 'الحواريون', en: 'Disciples' },
+  'Disciples (Hawariyyun)': { ar: 'الحواريون', en: 'Disciples' },
+  "ʿĀd": { ar: 'عاد', en: "ʿĀd" },
+  'People of Lut': { ar: 'قوم لوط', en: 'People of Lut' },
+  'Wife of Lut': { ar: 'امرأة لوط', en: 'Wife of Lut' },
+  "People of 'Ad": { ar: 'قوم عاد', en: "People of 'Ad" },
+  'Thamūd': { ar: 'ثمود', en: 'Thamūd' },
+  'People of Madyan': { ar: 'قوم مدين', en: 'People of Madyan' },
+  'Ashab al-Aykah': { ar: 'أصحاب الأيكة', en: 'Ashab al-Aykah' },
+  'People of Yunus': { ar: 'قوم يونس', en: 'People of Yunus' },
+  'Yajuj wa Majuj': { ar: 'يأجوج ومأجوج', en: 'Yajuj wa Majuj' },
+  'Abyssinian Army': { ar: 'جيش الحبشة', en: 'Abyssinian Army' },
+  'The Boy': { ar: 'الغلام', en: 'The Boy' },
+  'The King': { ar: 'الملك', en: 'The King' },
+  'The Sorcerer': { ar: 'الساحر', en: 'The Sorcerer' },
+  'The Monk': { ar: 'الراهب', en: 'The Monk' },
+  'Garden Owners': { ar: 'أصحاب الجنة', en: 'Garden Owners' },
+  'Village by the Sea': { ar: 'أهل القرية الساحلية', en: 'Village by the Sea' },
+  'Queen of Sheba (Bilqis)': { ar: 'ملكة سبأ (بلقيس)', en: 'Queen of Sheba (Bilqis)' },
+  Ifrit: { ar: 'العفريت', en: 'Ifrit' },
+  'One with Knowledge': { ar: 'الذي عنده علم من الكتاب', en: 'One with Knowledge' },
+  "Luqman's Son": { ar: 'ابن لقمان', en: "Luqman's Son" },
+  'Habil (Abel)': { ar: 'هابيل', en: 'Habil (Abel)' },
+  'Qabil (Cain)': { ar: 'قابيل', en: 'Qabil (Cain)' },
+  هابيل: { ar: 'هابيل', en: 'Habil (Abel)' },
+  قابيل: { ar: 'قابيل', en: 'Qabil (Cain)' },
+  ذو_القرنين: { ar: 'ذو القرنين', en: 'Dhul-Qarnayn' },
+  لقمان: { ar: 'لقمان', en: 'Luqman' },
+
+  // ============================================================
+  // NEW STORY FIGURES - Ilyas, Al-Yasa, Dhul-Kifl, Ya-Sin Town, etc.
+  // ============================================================
+
+  // Prophet Ilyas and Al-Yasa
+  Ilyas: { ar: 'إلياس', en: 'Ilyas (Elijah)' },
+  'Al-Yasa': { ar: 'اليسع', en: 'Al-Yasa (Elisha)' },
+  'Dhul-Kifl': { ar: 'ذو الكفل', en: 'Dhul-Kifl' },
+
+  // People of the Town (Ya-Sin)
+  'Three Messengers': { ar: 'الرسل الثلاثة', en: 'Three Messengers' },
+  'Believing Man': { ar: 'الرجل المؤمن', en: 'Believing Man' },
+  'Town Dwellers': { ar: 'أهل القرية', en: 'Town Dwellers' },
+
+  // People of the Rass and Tubba
+  'People of the Rass': { ar: 'أصحاب الرس', en: 'People of the Rass' },
+  Tubba: { ar: 'تُبَّع', en: 'Tubba' },
+  'People of Tubba': { ar: 'قوم تُبَّع', en: 'People of Tubba' },
+  Himyarites: { ar: 'حمير', en: 'Himyarites' },
+
+  // 'Abasa story
+  'Ibn Umm Maktum': { ar: 'عبد الله بن أم مكتوم', en: 'Ibn Umm Maktum' },
+  'Quraysh Leaders': { ar: 'سادة قريش', en: 'Quraysh Leaders' },
+
+  // Battle of Ahzab
+  Confederates: { ar: 'الأحزاب', en: 'Confederates' },
+  'Banu Qurayza': { ar: 'بني قريظة', en: 'Banu Qurayza' },
+  'Jews of Banu Qurayza': { ar: 'يهود بني قريظة', en: 'Jews of Banu Qurayza' },
+  Ghatafan: { ar: 'غطفان', en: 'Ghatafan' },
+
+  // Bani Nadir
+  'Bani Nadir': { ar: 'بني النضير', en: 'Bani Nadir' },
+  'Bani Nadir Jews': { ar: 'يهود بني النضير', en: 'Bani Nadir Jews' },
+
+  // People of Aiyka
+  'People of Aiyka': { ar: 'أصحاب الأيكة', en: 'People of Aiyka' },
+  Shuayb: { ar: 'شعيب', en: "Shu'ayb" },
 };
 
 // Segment aspect/type translations
@@ -686,6 +1195,129 @@ export const aspectTranslations: Record<string, { ar: string; en: string }> = {
   encouragement: { ar: 'التشجيع', en: 'encouragement' },
   afterlife: { ar: 'الآخرة', en: 'afterlife' },
   honor: { ar: 'الشرف', en: 'honor' },
+
+  // =============================================================================
+  // Grammar Analysis (إعراب)
+  // =============================================================================
+  grammar_title: { ar: 'الإعراب', en: 'Grammar Analysis' },
+  grammar_analyze: { ar: 'تحليل الإعراب', en: 'Analyze Grammar' },
+  grammar_loading: { ar: 'جارٍ التحليل النحوي...', en: 'Analyzing grammar...' },
+  grammar_error: { ar: 'تعذّر تحميل الإعراب', en: 'Failed to load grammar analysis' },
+  grammar_unavailable: { ar: 'خدمة الإعراب غير متاحة', en: 'Grammar service unavailable' },
+  grammar_no_data: { ar: 'لا تتوفر بيانات إعراب لهذه الآية', en: 'No grammar data available for this verse' },
+  grammar_retry: { ar: 'إعادة المحاولة', en: 'Try again' },
+  grammar_confidence: { ar: 'الثقة', en: 'Confidence' },
+  grammar_provider: { ar: 'المصدر', en: 'Provider' },
+  grammar_root: { ar: 'الجذر', en: 'Root' },
+  grammar_pattern: { ar: 'الوزن', en: 'Pattern' },
+  grammar_case: { ar: 'علامة الإعراب', en: 'Case Ending' },
+  grammar_legend: { ar: 'دليل الألوان', en: 'Color Legend' },
+
+  // Part of Speech Tags
+  grammar_pos_noun: { ar: 'اسم', en: 'Noun' },
+  grammar_pos_proper_noun: { ar: 'اسم علم', en: 'Proper Noun' },
+  grammar_pos_pronoun: { ar: 'ضمير', en: 'Pronoun' },
+  grammar_pos_demonstrative: { ar: 'اسم إشارة', en: 'Demonstrative' },
+  grammar_pos_relative: { ar: 'اسم موصول', en: 'Relative Pronoun' },
+  grammar_pos_interrogative_noun: { ar: 'اسم استفهام', en: 'Interrogative Noun' },
+  grammar_pos_masdar: { ar: 'مصدر', en: 'Verbal Noun' },
+  grammar_pos_verb: { ar: 'فعل', en: 'Verb' },
+  grammar_pos_past_verb: { ar: 'فعل ماض', en: 'Past Verb' },
+  grammar_pos_present_verb: { ar: 'فعل مضارع', en: 'Present Verb' },
+  grammar_pos_imperative_verb: { ar: 'فعل أمر', en: 'Imperative' },
+  grammar_pos_particle: { ar: 'حرف', en: 'Particle' },
+  grammar_pos_preposition: { ar: 'حرف جر', en: 'Preposition' },
+  grammar_pos_conjunction: { ar: 'حرف عطف', en: 'Conjunction' },
+  grammar_pos_negation: { ar: 'حرف نفي', en: 'Negation' },
+  grammar_pos_interrogative: { ar: 'حرف استفهام', en: 'Interrogative' },
+  grammar_pos_conditional: { ar: 'حرف شرط', en: 'Conditional' },
+  grammar_pos_exception: { ar: 'حرف استثناء', en: 'Exception' },
+  grammar_pos_adjective: { ar: 'صفة', en: 'Adjective' },
+  grammar_pos_adverb: { ar: 'ظرف', en: 'Adverb' },
+  grammar_pos_unknown: { ar: 'غير محدد', en: 'Unknown' },
+
+  // Grammatical Roles
+  grammar_role_subject: { ar: 'مبتدأ', en: 'Subject' },
+  grammar_role_predicate: { ar: 'خبر', en: 'Predicate' },
+  grammar_role_doer: { ar: 'فاعل', en: 'Doer/Agent' },
+  grammar_role_deputy_doer: { ar: 'نائب فاعل', en: 'Deputy Doer' },
+  grammar_role_object: { ar: 'مفعول به', en: 'Object' },
+  grammar_role_object_for: { ar: 'مفعول لأجله', en: 'Object For' },
+  grammar_role_object_in: { ar: 'مفعول فيه', en: 'Object In' },
+  grammar_role_absolute_object: { ar: 'مفعول مطلق', en: 'Absolute Object' },
+  grammar_role_object_with: { ar: 'مفعول معه', en: 'Object With' },
+  grammar_role_circumstantial: { ar: 'حال', en: 'Circumstantial' },
+  grammar_role_specification: { ar: 'تمييز', en: 'Specification' },
+  grammar_role_excepted: { ar: 'مستثنى', en: 'Excepted' },
+  grammar_role_possessor: { ar: 'مضاف', en: 'Possessor' },
+  grammar_role_possessed: { ar: 'مضاف إليه', en: 'Possessed' },
+  grammar_role_prepositional: { ar: 'جار ومجرور', en: 'Prepositional Phrase' },
+  grammar_role_genitive: { ar: 'مجرور', en: 'Genitive' },
+  grammar_role_adjective: { ar: 'نعت', en: 'Adjective' },
+  grammar_role_substitute: { ar: 'بدل', en: 'Substitute' },
+  grammar_role_conjunction: { ar: 'معطوف', en: 'Conjoined' },
+  grammar_role_emphasis: { ar: 'توكيد', en: 'Emphasis' },
+  grammar_role_vocative: { ar: 'منادى', en: 'Vocative' },
+  grammar_role_unknown: { ar: 'غير محدد', en: 'Unknown' },
+
+  // Sentence Types
+  grammar_sentence_nominal: { ar: 'جملة اسمية', en: 'Nominal Sentence' },
+  grammar_sentence_verbal: { ar: 'جملة فعلية', en: 'Verbal Sentence' },
+  grammar_sentence_prepositional: { ar: 'شبه جملة', en: 'Prepositional Phrase' },
+
+  // Provider Labels
+  grammar_provider_farasa: { ar: 'فرسا', en: 'Farasa' },
+  grammar_provider_camel: { ar: 'كاميل', en: 'CAMeL Tools' },
+  grammar_provider_stanza: { ar: 'ستانزا', en: 'Stanza' },
+  grammar_provider_llm: { ar: 'تحليل ذكي', en: 'AI Analysis' },
+  grammar_provider_static: { ar: 'بيانات ثابتة', en: 'Static Data' },
+
+  // =============================================================================
+  // Tafseer (التفسير)
+  // =============================================================================
+  tafseer_title: { ar: 'التفسير', en: 'Tafseer' },
+  tafseer_select_edition: { ar: 'اختر التفسير', en: 'Select Tafseer' },
+  tafseer_loading: { ar: 'جارٍ تحميل التفسير...', en: 'Loading tafseer...' },
+  tafseer_error: { ar: 'تعذّر تحميل التفسير', en: 'Failed to load tafseer' },
+  tafseer_unavailable: { ar: 'خدمة التفسير غير متاحة', en: 'Tafseer service unavailable' },
+  tafseer_no_data: { ar: 'لا يتوفر تفسير لهذه الآية', en: 'No tafseer available for this verse' },
+  tafseer_source: { ar: 'المصدر', en: 'Source' },
+  tafseer_author: { ar: 'المؤلف', en: 'Author' },
+  tafseer_language: { ar: 'اللغة', en: 'Language' },
+  tafseer_preferences: { ar: 'إعدادات التفسير', en: 'Tafseer Preferences' },
+  tafseer_show_translation: { ar: 'إظهار الترجمة', en: 'Show Translation' },
+  tafseer_show_arabic: { ar: 'إظهار العربية', en: 'Show Arabic' },
+  tafseer_show_both: { ar: 'إظهار الاثنين', en: 'Show Both' },
+
+  // Tafseer Edition Names
+  tafseer_muyassar: { ar: 'التفسير الميسر', en: 'Al-Muyassar (Simplified)' },
+  tafseer_jalalayn: { ar: 'تفسير الجلالين', en: 'Tafsir Al-Jalalayn' },
+  tafseer_ibn_kathir: { ar: 'تفسير ابن كثير', en: 'Tafsir Ibn Kathir' },
+  tafseer_qurtubi: { ar: 'تفسير القرطبي', en: 'Tafsir Al-Qurtubi' },
+  tafseer_tabari: { ar: 'تفسير الطبري', en: 'Tafsir At-Tabari' },
+  tafseer_baghawi: { ar: 'تفسير البغوي', en: 'Tafsir Al-Baghawi' },
+  tafseer_sahih: { ar: 'الترجمة الصحيحة', en: 'Sahih International' },
+  tafseer_pickthall: { ar: 'ترجمة بيكثال', en: 'Pickthall Translation' },
+  tafseer_yusufali: { ar: 'ترجمة يوسف علي', en: 'Yusuf Ali Translation' },
+  tafseer_hilali: { ar: 'ترجمة الهلالي وخان', en: 'Hilali & Khan' },
+
+  // Madhab Names
+  madhab_shafii: { ar: 'الشافعي', en: "Shafi'i" },
+  madhab_maliki: { ar: 'المالكي', en: 'Maliki' },
+  madhab_hanafi: { ar: 'الحنفي', en: 'Hanafi' },
+  madhab_hanbali: { ar: 'الحنبلي', en: 'Hanbali' },
+  madhab_general: { ar: 'عام', en: 'General' },
+
+  // =============================================================================
+  // Admin/Verification
+  // =============================================================================
+  admin_verification: { ar: 'التحقق', en: 'Verification' },
+  admin_approve: { ar: 'موافقة', en: 'Approve' },
+  admin_reject: { ar: 'رفض', en: 'Reject' },
+  admin_pending: { ar: 'قيد الانتظار', en: 'Pending' },
+  admin_reviewed: { ar: 'تمت المراجعة', en: 'Reviewed' },
+  admin_flag: { ar: 'إبلاغ', en: 'Flag' },
+  admin_flag_reason: { ar: 'سبب الإبلاغ', en: 'Flag Reason' },
 };
 
 export function t(key: string, language: Language): string {

@@ -35,7 +35,8 @@ REFUSAL_THRESHOLD = 0.35  # Below this = hard refuse (separated from LOW)
 
 # REFUSAL TRIGGER CONDITIONS
 MIN_CITATION_COVERAGE = 0.30  # At least 30% of paragraphs need citations
-MIN_AVERAGE_RELEVANCE = 0.30  # Average relevance must be at least 0.3
+MIN_AVERAGE_RELEVANCE = 0.20  # Average relevance must be at least 0.2 (lowered for cross-encoder scores)
+MIN_TOP_RELEVANCE = 0.50  # At least one chunk must have high relevance
 MIN_SOURCE_RELIABILITY = 0.50  # At least one source must have 0.5+ reliability
 
 # EVIDENCE DENSITY REQUIREMENTS
@@ -330,11 +331,14 @@ class ConfidenceScorer:
             if coverage < MIN_CITATION_COVERAGE:
                 return True, f"Citation coverage ({coverage:.0%}) below minimum ({MIN_CITATION_COVERAGE:.0%})"
 
-        # Condition 4: Average relevance too low
+        # Condition 4: Relevance too low
+        # Check both average and top relevance - allow response if top chunk is highly relevant
         if relevance_scores:
             avg_relevance = sum(relevance_scores) / len(relevance_scores)
-            if avg_relevance < MIN_AVERAGE_RELEVANCE:
-                return True, f"Average relevance ({avg_relevance:.2f}) below minimum ({MIN_AVERAGE_RELEVANCE:.2f})"
+            max_relevance = max(relevance_scores)
+            # Only refuse if BOTH average is too low AND top chunk is also weak
+            if avg_relevance < MIN_AVERAGE_RELEVANCE and max_relevance < MIN_TOP_RELEVANCE:
+                return True, f"Relevance too low (avg={avg_relevance:.2f}, max={max_relevance:.2f})"
 
         # Condition 5: All sources have low reliability
         if source_reliability_scores:

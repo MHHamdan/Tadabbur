@@ -35,7 +35,8 @@ class QuranVerse(Base):
 
     # Text variants
     text_uthmani = Column(Text, nullable=False)  # Standard Uthmani script with diacritics
-    text_imlaei = Column(Text, nullable=False)  # Simplified for search (no diacritics)
+    text_imlaei = Column(Text, nullable=False)  # Imlaei script (still has diacritics)
+    text_normalized = Column(Text, nullable=True)  # Normalized for search (no diacritics)
 
     # Mushaf positioning
     page_no = Column(Integer, nullable=False, index=True)
@@ -54,7 +55,7 @@ class QuranVerse(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
-    translations = relationship("Translation", back_populates="verse", lazy="selectin")
+    translations = relationship("Translation", back_populates="verse", lazy="select")  # Changed from selectin to avoid eager loading
 
     __table_args__ = (
         UniqueConstraint("sura_no", "aya_no", name="uq_sura_aya"),

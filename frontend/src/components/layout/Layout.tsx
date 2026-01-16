@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Book, MessageCircle, Home, Globe, BookOpen, Wrench, Map } from 'lucide-react';
+import { Book, MessageCircle, Home, Globe, BookOpen, Wrench, Map, Network, Search, Link2, Compass, BookOpenCheck } from 'lucide-react';
 import { useLanguageStore } from '../../stores/languageStore';
 import { t } from '../../i18n/translations';
 import clsx from 'clsx';
@@ -15,8 +15,13 @@ export function Layout({ children }: LayoutProps) {
 
   const navItems = [
     { path: '/', label: 'nav_home', icon: Home },
+    { path: '/mushaf', label: 'nav_mushaf', icon: BookOpenCheck },
     { path: '/stories', label: 'nav_stories', icon: Book },
     { path: '/story-atlas', label: 'nav_atlas', icon: Map },
+    { path: '/concepts', label: 'nav_concepts', icon: Network },
+    { path: '/themes', label: 'nav_themes', icon: Compass },
+    { path: '/similarity', label: 'nav_similarity', icon: Link2 },
+    { path: '/search', label: 'nav_search', icon: Search },
     { path: '/ask', label: 'nav_ask', icon: MessageCircle },
     { path: '/sources', label: 'nav_sources', icon: BookOpen },
     { path: '/tools', label: 'nav_tools', icon: Wrench },

@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        'xs': '475px',  // Extra small devices
+      },
       fontFamily: {
         arabic: ['Amiri', 'Traditional Arabic', 'serif'],
         sans: ['Inter', 'system-ui', 'sans-serif'],

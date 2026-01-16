@@ -19,7 +19,7 @@
  */
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import cytoscape, { NodeSingular, EdgeSingular } from 'cytoscape';
-import { StoryGraph, StoryGraphNode, StoryGraphEdge } from '../../lib/api';
+import { StoryGraph, StoryGraphNode, StoryGraphEdge, AtlasGraphResponse } from '../../lib/api';
 import { translateTag as translateTagFromI18n, Language } from '../../i18n/translations';
 
 // =============================================================================
@@ -28,8 +28,25 @@ import { translateTag as translateTagFromI18n, Language } from '../../i18n/trans
 
 type ViewMode = 'chronological' | 'thematic' | 'memorization';
 
+// Generic graph interface that works with both StoryGraph and AtlasGraphResponse
+interface GenericGraph {
+  nodes: Array<{
+    id: string;
+    type: string;
+    label: string;
+    data?: Record<string, unknown>;
+  }>;
+  edges: Array<{
+    source: string;
+    target: string;
+    type: string;
+    label?: string | null;
+    data?: Record<string, unknown>;
+  }>;
+}
+
 interface StoryGraphViewProps {
-  graph: StoryGraph;
+  graph: GenericGraph;
   language: 'ar' | 'en';
   onNodeClick?: (node: StoryGraphNode) => void;
   onEdgeClick?: (edge: StoryGraphEdge) => void;
@@ -75,6 +92,23 @@ const NARRATIVE_ROLE_TRANSLATIONS: Record<string, { ar: string; en: string }> = 
   development: { ar: 'تطور', en: 'Development' },
   climax: { ar: 'الذروة', en: 'Climax' },
   resolution: { ar: 'الحل', en: 'Resolution' },
+  rising_action: { ar: 'تصاعد الأحداث', en: 'Rising Action' },
+  background: { ar: 'خلفية', en: 'Background' },
+  conclusion: { ar: 'الخاتمة', en: 'Conclusion' },
+  setup: { ar: 'التمهيد', en: 'Setup' },
+  falling_action: { ar: 'تراجع الأحداث', en: 'Falling Action' },
+  // Additional narrative roles for new stories
+  confrontation: { ar: 'المواجهة', en: 'Confrontation' },
+  rejection: { ar: 'الرفض', en: 'Rejection' },
+  dawah: { ar: 'الدعوة', en: 'Call to Faith' },
+  exposure: { ar: 'الانكشاف', en: 'Exposure' },
+  heroism: { ar: 'البطولة', en: 'Heroism' },
+  escalation: { ar: 'التصعيد', en: 'Escalation' },
+  steadfastness: { ar: 'الثبات', en: 'Steadfastness' },
+  correction: { ar: 'التصحيح', en: 'Correction' },
+  contrast: { ar: 'التناقض', en: 'Contrast' },
+  lesson: { ar: 'الدرس', en: 'Lesson' },
+  description: { ar: 'الوصف', en: 'Description' },
   default: { ar: 'عام', en: 'General' },
 };
 
@@ -114,9 +148,16 @@ const MIN_CONTAINER_WIDTH = 300;
 const MIN_CONTAINER_HEIGHT = 400;
 
 // Zoom constraints for fit-to-view
-const MIN_ZOOM = 0.4;
-const MAX_ZOOM = 1.8;
-const FIT_PADDING = 60;
+const MIN_ZOOM = 0.3;
+const MAX_ZOOM = 2.0;
+const FIT_PADDING = 80;
+
+// Node sizing for better readability
+const SEGMENT_NODE_WIDTH = 160;
+const SEGMENT_NODE_HEIGHT = 80;
+const STORY_NODE_SIZE = 120;
+const LABEL_FONT_SIZE = '14px';
+const LABEL_MAX_WIDTH = '140px';
 
 // =============================================================================
 // NODE DETAIL PANEL
@@ -312,15 +353,15 @@ export function StoryGraphView({
           'text-valign': 'center',
           'text-halign': 'center',
           color: '#fff',
-          'font-size': '16px',
+          'font-size': '18px',
           'font-weight': 'bold',
-          width: 100,
-          height: 100,
+          width: STORY_NODE_SIZE,
+          height: STORY_NODE_SIZE,
           shape: 'ellipse',
-          'border-width': 3,
+          'border-width': 4,
           'border-color': '#0284c7',
           'text-wrap': 'wrap',
-          'text-max-width': '90px',
+          'text-max-width': '110px',
         },
       },
       // Entry point node
@@ -332,24 +373,33 @@ export function StoryGraphView({
           'border-style': 'double',
         },
       },
-      // Default segment node
+      // Default segment node - larger with label inside
       {
         selector: 'node[type="segment"]',
         style: {
           'background-color': '#f8fafc',
           'border-color': '#94a3b8',
-          'border-width': 2,
+          'border-width': 3,
           label: 'data(label)',
-          'text-valign': 'bottom',
-          'text-margin-y': 12,
+          'text-valign': 'center',
+          'text-halign': 'center',
           color: '#1e293b',
-          'font-size': '13px',
-          'font-weight': '500',
+          'font-size': LABEL_FONT_SIZE,
+          'font-weight': '600',
           'text-wrap': 'wrap',
-          'text-max-width': '140px',
-          width: 80,
-          height: 80,
+          'text-max-width': LABEL_MAX_WIDTH,
+          width: SEGMENT_NODE_WIDTH,
+          height: SEGMENT_NODE_HEIGHT,
           shape: 'round-rectangle',
+          'padding': '12px',
+        },
+      },
+      // Show verse reference below segment nodes
+      {
+        selector: 'node[type="segment"][verse_reference]',
+        style: {
+          'text-valign': 'center',
+          'text-halign': 'center',
         },
       },
       // Hidden nodes (for memorization mode)
@@ -370,29 +420,30 @@ export function StoryGraphView({
       },
     ];
 
-    // Add narrative role specific styles
+    // Add narrative role specific styles with stronger borders
     Object.entries(NARRATIVE_ROLE_COLORS).forEach(([role, colors]) => {
       styles.push({
         selector: `node[narrative_role="${role}"]`,
         style: {
           'background-color': colors.bg,
           'border-color': colors.border,
+          'border-width': 3,
           color: colors.text,
         },
       });
     });
 
-    // Add edge styles
+    // Add edge styles - thicker and more visible
     styles.push({
       selector: 'edge',
       style: {
         width: 3,
-        'line-color': '#94a3b8',
-        'target-arrow-color': '#94a3b8',
+        'line-color': '#cbd5e1',
+        'target-arrow-color': '#cbd5e1',
         'target-arrow-shape': 'triangle',
         'arrow-scale': 1.2,
         'curve-style': 'bezier',
-        'font-size': '10px',
+        'font-size': '11px',
         color: '#475569',
       },
     });
@@ -432,23 +483,21 @@ export function StoryGraphView({
 
   // Get layout based on mode
   const getLayout = useCallback((mode: ViewMode) => {
-    const ySpacing = 150; // Increased vertical spacing
-    const xSpread = 120; // Horizontal spread for arc layout
+    const ySpacing = 140; // Increased vertical spacing for timeline
+    const radius = 280; // Increased radius for radial layout
 
     if (mode === 'chronological') {
+      // Vertical timeline layout
       return {
         name: 'preset',
         positions: (node: NodeSingular) => {
           const data = node.data();
           if (data.type === 'story') {
-            return { x: 0, y: -50 }; // Story node above timeline
+            return { x: 0, y: -100 }; // Story node above timeline
           }
           const index = data.chronological_index || data.narrative_order || 1;
-          // Arrange in a gentle arc for visual appeal and readability
-          const normalizedPos = (index - 1) / Math.max((totalSteps || 1) - 1, 1);
-          const angle = normalizedPos * Math.PI * 0.4 - Math.PI * 0.2;
           return {
-            x: Math.sin(angle) * xSpread,
+            x: 0,
             y: index * ySpacing,
           };
         },
@@ -458,16 +507,25 @@ export function StoryGraphView({
     }
 
     if (mode === 'thematic') {
+      // Radial layout with story at center
       return {
-        name: 'cose',
+        name: 'preset',
+        positions: (node: NodeSingular) => {
+          const data = node.data();
+          if (data.type === 'story') {
+            return { x: 0, y: 0 }; // Story node at center
+          }
+          const index = data.chronological_index || data.narrative_order || 1;
+          const total = totalSteps || 5;
+          // Distribute segments in a circle around the story
+          const angle = ((index - 1) / total) * 2 * Math.PI - Math.PI / 2;
+          return {
+            x: Math.cos(angle) * radius,
+            y: Math.sin(angle) * radius,
+          };
+        },
         animate: true,
         animationDuration: 500,
-        nodeRepulsion: () => 15000, // Increased repulsion for more spacing
-        idealEdgeLength: () => 180, // Longer edges
-        edgeElasticity: () => 80,
-        gravity: 0.3, // Less gravity for more spread
-        numIter: 300,
-        padding: 50,
       };
     }
 
@@ -477,7 +535,7 @@ export function StoryGraphView({
       positions: (node: NodeSingular) => {
         const data = node.data();
         if (data.type === 'story') {
-          return { x: 0, y: -50 };
+          return { x: 0, y: -100 };
         }
         const index = data.chronological_index || data.narrative_order || 1;
         return { x: 0, y: index * ySpacing };
@@ -591,8 +649,16 @@ export function StoryGraphView({
       const graphNode = graph.nodes.find(n => n.id === nodeData.id);
 
       if (graphNode) {
-        setSelectedNode(graphNode);
-        onNodeClick?.(graphNode);
+        // Enhance with total_steps for display
+        const enhancedNode = {
+          ...graphNode,
+          data: {
+            ...graphNode.data,
+            total_steps: totalSteps,
+          },
+        };
+        setSelectedNode(enhancedNode);
+        onNodeClick?.(enhancedNode);
 
         // Highlight node
         cyRef.current?.elements().removeClass('highlighted');

@@ -1,0 +1,76 @@
+{
+  "name": "Quran Text - Hafs Recitation",
+  "version": "1.0.0",
+  "description": "Complete Quran text in Uthmani script with Hafs recitation variant",
+  "language": "ar",
+  "license": "Public Domain",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "citation": "The Noble Quran",
+
+  "sources": [
+    {
+      "id": "tanzil_quran_uthmani",
+      "name": "Tanzil.net Quran Text",
+      "url": "https://tanzil.net/trans/en.sahih",
+      "format": "text",
+      "encoding": "utf-8",
+      "description": "Quran text from Tanzil.net - widely used source",
+      "license": "Creative Commons",
+      "notes": "Alternative source if primary unavailable"
+    },
+    {
+      "id": "local_hafs_smart",
+      "name": "Hafs Smart JSON (Local)",
+      "path": "../../assets/hafs_smart_v8.json",
+      "format": "json",
+      "encoding": "utf-8",
+      "description": "Local copy from existing project",
+      "is_primary": true
+    }
+  ],
+
+  "expected_structure": {
+    "total_verses": 6236,
+    "total_suras": 114,
+    "total_pages": 604,
+    "total_juz": 30,
+    "fields": [
+      "id",
+      "sura_no",
+      "sura_name_ar",
+      "sura_name_en",
+      "aya_no",
+      "aya_text",
+      "aya_text_emlaey",
+      "page",
+      "jozz",
+      "line_start",
+      "line_end"
+    ]
+  },
+
+  "parser": {
+    "type": "json",
+    "root_key": null,
+    "field_mapping": {
+      "id": "id",
+      "sura_no": "sura_no",
+      "sura_name_ar": "sura_name_ar",
+      "sura_name_en": "sura_name_en",
+      "aya_no": "aya_no",
+      "text_uthmani": "aya_text",
+      "text_imlaei": "aya_text_emlaey",
+      "page_no": "page",
+      "juz_no": "jozz",
+      "line_start": "line_start",
+      "line_end": "line_end"
+    }
+  },
+
+  "validation": {
+    "checksum_sha256": null,
+    "min_file_size_bytes": 1000000,
+    "required_fields": ["sura_no", "aya_no", "aya_text"],
+    "verse_count_check": 6236
+  }
+}

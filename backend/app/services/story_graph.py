@@ -356,10 +356,17 @@ class StoryGraphService:
         title = segment.title_ar if language == "ar" else segment.title_en
         summary = segment.summary_ar if language == "ar" else segment.summary_en
 
+        # Use title, fall back to summary, then verse reference
+        # Strip to handle empty strings
+        label = (title or "").strip() or (summary or "").strip() or segment.verse_reference
+        # Truncate long labels for graph display
+        if len(label) > 40:
+            label = label[:37] + "..."
+
         return GraphNode(
             id=segment.id,
             type="segment",
-            label=title or segment.verse_reference,
+            label=label,
             data={
                 "story_id": segment.story_id,
                 "surah": segment.sura_no,
